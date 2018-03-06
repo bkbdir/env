@@ -1,0 +1,12 @@
+#!/bin/sh
+
+
+
+hname="$(hostname)"
+
+if tmux has-session -t "$hname" ; then
+   tmux attach -t "$hname"
+else
+   tmux new -s "$hname"
+fi
+

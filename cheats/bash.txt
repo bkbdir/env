@@ -1,0 +1,74 @@
+Bash and utilies
+-----------------
+
+### Warn and Die
+
+warn () { echo "$*" }
+ 
+die () { echo "$*";  exit 1; }
+
+### Check for success/error
+
+   if [ $? -eq 0 ] ; then echo "Success"; fi
+
+### Check for true
+
+   state=true   ##  state=false
+   
+   if $state; then echo "True" ; fi
+
+### Check multiple Conditions
+
+   if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ]
+or
+    if [ $CHECK -ne 0 ] && [ $CHECK2 -eq 0 ] ; then
+
+
+### redirect sterr to stdout: 
+   
+   command 2>&1
+
+## compare two file modification
+
+if [ "$output" -nt "$input" ]; then
+
+
+### Detect errorcode 
+
+   [ "$?" -eq 0 ] || { echo "Err: could not detect os with uname" ; exit 1 ;} 
+
+or 
+   os=$(uname) || { echo "Err: could not detect os with uname" ; exit 1 ;} 
+
+
+
+
+### Filename & Extension
+
+    filename=$(basename "$fullfile")
+    extension="${filename##*.}"
+    filename="${filename%.*}"
+
+    allextensions="${filename#*.}"
+
+
+broken symbolic link:
+
+   ! -e broken.link
+
+#### Case
+    case $foo in
+        bar)
+            echo "bb"
+        ;;
+        *)
+            echo "dddefault"
+        ;;
+    esac
+    
+#### remove whitespace
+
+    tr -d ' '
+   
+
+

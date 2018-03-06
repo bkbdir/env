@@ -1,0 +1,17 @@
+Tmux
+----
+
+### Name of the current session:
+
+    tmux display-message -p '#S'
+
+#### Name of active window
+
+   tmux display-message -p '#W'
+
+with target: 
+
+   mux -t "target-window" display-message -p '#W'
+
+
+

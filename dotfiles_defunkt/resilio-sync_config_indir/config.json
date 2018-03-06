@@ -1,0 +1,9 @@
+{
+    "storage_path" : "/home/bkb/.config/resilio-sync/storage",
+    "pid_file" : "/home/bkb/.config/resilio-sync/sync.pid",
+
+    "webui" :
+    {
+        "listen" : "127.0.0.1:8888"
+    }
+}

@@ -1,0 +1,7 @@
+x2go
+-----
+
+### open chrome over x2go
+
+   mkdir -p /tmp/chromium
+   chromium-browser --user-data-dir=/tmp/chromium

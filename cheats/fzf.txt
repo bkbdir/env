@@ -1,0 +1,5 @@
+fzf
+----
+
+
+find . -iname '*ubuntu*'  | fzf  --preview 'cat {}'

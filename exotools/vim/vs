@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+
+cwd=$(pwd)
+
+fileinp=$1
+servname=$2
+
+# overwrite PERLIB 
+PERL5LIB=$HOME/perl5/lib/perl5   
+[ -d "$PERL5LIB" ] || { echo "Err: PERL5LIB not valid"; exit 1; }
+
+
+
+here=$(perl -MCwd -e 'print Cwd::realpath($ARGV[0])' $0);
+heredir=$(dirname $here)
+
+
+if [ -n "$fileinp" ];then
+   # if there is a filename , pwd is the default vim servname
+   if [ -z "$servname" ];then
+      servname=$(basename $cwd)
+   fi
+   /usr/local/bin/perl -I $PERL5LIB $heredir/vimserver.pl  $fileinp $servname
+else
+   /usr/local/bin/perl -I $PERL5LIB $heredir/vimserver.pl 
+fi
+
+
+

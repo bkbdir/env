@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=synergy
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=synergy
+Name=synergy
+Comment[en_US]=
+Comment=

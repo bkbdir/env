@@ -1,0 +1,7 @@
+Javascript
+----------
+
+
+### get the current URL
+
+   window.location.toString()

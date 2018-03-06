@@ -1,0 +1,27 @@
+#!/bin/sh
+
+targetdir=$1
+shift
+rawtitle="$@"
+
+[ -d "$targetdir" ] || { echo "Err: targetdir '$targetdir' doesnt' exist"; exit 1 ; }
+
+title=$(perl -e '$str=join "-", map { s/[^a-zA-Z0-9]+/_/g; lc $_ ; } @ARGV ; print $str ; ' "$rawtitle")
+
+fpath=$targetdir/$title.md
+
+if [ -f "$fpath" ]; then
+   echo "Err: sorry file $fpath already exists"
+else
+   echo "# $title" > $fpath
+fi
+
+if which mvim > /dev/null ; then 
+   if mvim --serverlist | grep NOTE > /dev/null ; then
+      mvim --servername NOTE --remote $fpath
+   else
+      mvim --servername NOTE $fpath
+   fi
+else
+   echo $fpath
+fi

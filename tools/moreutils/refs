@@ -1,0 +1,24 @@
+#!/bin/sh
+
+
+[ "$#" -gt "0" ] || { echo "Err: usage [subject] [ grep ] [ filter ] " ; exit 1;  }
+
+docs=$HOME/aux/docs/$1
+
+[ -e "$docs" ] || { echo "Err: folder $docs not exists" ; exit 1 ; }
+
+res= p=
+case $# in:
+if [ "$#" = "3" ]; then
+    res=$(grep -lir "$2" $docs | grep -i $3 | ~/bins/sbin/sentaku)
+    p=$res
+elif [ "$#" = "2" ]; then
+    res=$(grep -lir "$2" $docs | ~/bins/sbin/sentaku)
+    p=$res
+else
+    res=$( ls $docs  | ~/bins/sbin/sentaku)
+    p=$docs/$res
+fi
+
+elinks --remote "openURL($p)"
+tmux select-pane -t 0:0.2

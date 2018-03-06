@@ -1,0 +1,34 @@
+# Git
+
+#### Forking workflow (simple)
+
+    - fork repo in github
+    - clone local copy
+    - create branch
+          git checkout -b perlb
+    - after editing, and commit, do push to branch
+        git push origin perlb
+
+### Git
+
+#### update a repo ...
+
+   git pull origin master
+
+#### workflow with multiple accounts
+
+in ~/.ssh/config:
+  
+    Host github.com-auxsend 
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/auxsend_github
+
+    in local .git/config
+
+        git@github.com-auxsend:auxsend/gambit.git
+
+
+
+
+

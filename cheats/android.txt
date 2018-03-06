@@ -1,0 +1,36 @@
+Android Development
+--------------------
+
+### list Emulators
+
+emulator -list-avds
+
+### Run Emulator
+
+   emulator -avd testAVD
+
+### Android Environment Variables
+
+There a two most important variable, the other depend on them
+
+   ANDROID_SDK_ROOT=HOME/opt/android/sdk
+
+(ANDROID_HOME is deprecated)
+
+   ANDROID_EMULATOR_HOME=$HOME/.android
+
+### Install an avd 
+
+Install a system-iname:
+   sdkmananger 'system-images;android-23;google_apis;x86'
+
+Create an AVD:
+
+   avdmanager create avd --force --name testAVD --abi google_apis/x86 --package 'system-images;android-23;google_apis;x86'
+
+or 
+   echo "no" | avdmanager --verbose create avd --force --name x86 --device "4in WVGA (Nexus S)" --package "system-images;android-24;google_apis;x86" --tag "google_apis" --abi "x86"
+
+Run emulator
+
+   emulator -avd testAVD

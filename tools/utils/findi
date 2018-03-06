@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cwd=$(pwd)
+
+if [ -n "$2" ] ; then
+   find "$cwd" -iname "$1"  | grep -i $2
+else
+   find "$cwd" -iname "$1"
+fi

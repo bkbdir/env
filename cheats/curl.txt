@@ -1,0 +1,10 @@
+Curl
+----
+
+Uploadsl with curl
+
+   -T : that file
+   -k : disabling a certificate error
+   -u : user
+
+   curl --ftp-ssl -T test.txt -k -u "ben:MYPASSWD" "ftp://ftp.auxdir.com/"

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+[ "$#" = "3" ] || { echo "Usage : $0 koord1 koord2 collision" ; exit 1 ; }
+# passtab counts from 0, not ideal when working manually with the card
+
+coo2=$(perl -e '@l=split /:/, $ARGV[0]; print(($l[0] -1) . ":" . $l[1]);' $2)
+
+~/local/bin/passtab -i ~/.passtab_gpg -g "$1" -s "$coo2" --collision "$3" | tr -d '\n' |  xclip -sel clip 

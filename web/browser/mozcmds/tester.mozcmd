@@ -1,0 +1,82 @@
+
+[
+  {
+    name: 'tester',
+    description: 'Show a message',
+    params: [
+      {
+        name: 'dir',
+        type: 'string',
+        description: 'which dir to show',
+      }
+    ],
+    exec: function(args, context) {
+
+function readFile(file) {
+    var ioServ = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+    var fileURI = ioServ.newFileURI(file);
+    var fileChannel = ioServ.newChannel(fileURI.asciiSpec, null, null);
+    var rawInStream = fileChannel.open();
+    var scriptableInStream = Components.classes["@mozilla.org/scriptableinputstream;1"].createInstance(Components.interfaces.nsIScriptableInputStream);
+    scriptableInStream.init(rawInStream);
+    var available = scriptableInStream.available();
+    var fileContents = scriptableInStream.read(available);
+    scriptableInStream.close();
+return fileContents;
+}
+
+
+
+function runCMD(cmd, args) {
+    // see: https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIProcess
+    // create an nsIFile for the executable
+    var file = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsIFile);
+    file.initWithPath(cmd);
+    // create an nsIProcess
+    var process = Components.classes["@mozilla.org/process/util;1"].createInstance(Components.interfaces.nsIProcess);
+    process.init(file);
+    // create a new tmp file
+    var ds = Components.classes["@mozilla.org/file/directory_service;1"].getService();
+    var dsprops = ds.QueryInterface(Components.interfaces.nsIProperties);
+    var tmpFile = dsprops.get("TmpD", Components.interfaces.nsIFile);
+    tmpFile.append("Query.tmp");
+    tmpFile.createUnique(tmpFile.NORMAL_FILE_TYPE, 0600);
+    // append the tmp file to the parameters
+    args.unshift( tmpFile.path);
+    // Run the process.
+    // If first param is true, calling thread will be blocked until called process terminates.
+    // Second and third params are used to pass command-line arguments to the process.
+    process.run(true, args , args.length);
+    // ok, now get the content of the tmp file
+    if (tmpFile.exists()) {
+        var outStr = readFile(tmpFile);
+        tmpFile.remove(false);
+        return outStr;
+    }else{
+    return 'no tmp file';
+    }
+}
+
+var cargs = [ args.dir ];
+
+//var execFile = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+////var process = Components.classes["@mozilla.org/process/util;1"].createInstance(Components.interfaces.nsIProcess);
+
+//ecFile.initWithPath(cmd);
+
+function getCurrentURL(){
+
+    var currentWindow = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator).getMostRecentWindow("navigator:browser");
+
+    var currBrowser = currentWindow.getBrowser();
+    var currURL = currBrowser.currentURI.spec;
+
+    return currURL;
+}
+
+return runCMD("/home/ben/dev/browser/mozcmds/caller.sh", [ "echo", getCurrentURL()]);
+
+    }
+  }
+]
+

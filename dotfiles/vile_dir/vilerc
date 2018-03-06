@@ -1,0 +1,58 @@
+;source /home/ben/.vile/filters.rc
+	
+set ruler
+set modeline
+set autoindent
+set tabstop 4
+set showmatch
+set notabinsert
+set number
+
+
+source "filters.rc"
+source "palettes.rc"
+
+;source /home/ben/local/vile/vile/filters.rc
+;ource /home/ben/.vile/palettes.rc
+setv $read-hook HighlightFilter
+bind-key grow-window + 
+bind-key shrink-window - 
+
+setv $autocolor-hook HighlightFilter
+setv $read-hook HighlightFilter
+set autocolor=500
+
+set bcolor=default
+
+4 store-macro
+    1 shell-command "tmux send-keys -t edit:1 'echo hi' C-m" $cfilname
+~endm
+bind-key execute-macro-4 g 
+
+12 store-macro
+    write-message &list-buffers
+~endm
+bind-key execute-macro-12 ^A-s
+
+bind-key next-buffer ^I
+;bind-key previous-buffer v
+bind-key next-line a 
+
+22 store-macro
+	~force execute-hypertext-command
+	~if &not $status
+		~force forward-character-to-eol
+	~endif
+~endm
+bind-key execute-macro-22 ^M
+perl "use directory"
+
+perl "use hgrep"
+
+perl "use Vileserv"
+
+
+30 store-macro
+    write-message "this is a test macro"
+~endm
+bind-key execute-macro-30 #7 

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+
+win=$1
+
+
+if tmux has-session -t appterm; then  
+   if [ -n "$win" ] ; then
+      tmux attach -t appterm  \; select-window -t $win
+   else
+      tmux attach -t appterm 
+   fi
+else
+   tmux new  -s appterm
+fi

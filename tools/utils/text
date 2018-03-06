@@ -1,0 +1,31 @@
+#!/bin/sh
+
+
+# create a text file
+
+
+dir=$1
+shift
+
+
+[ -n "$dir" ] || { echo "usage: <dir> title" ; exit 1; }
+[ -n "$1" ] || { echo "usage: <dir> title" ; exit 1; }
+
+[ -d "$dir" ] || { echo "Err: output dir $dir not exists" ; exit 1; }
+
+
+name=$(perl -e '$str=(join "-", (map {s/([^a-zA-Z0-9])+/_/g; lc $_}  @ARGV)); $str=~s/^_*//; print $str;' $@)
+
+file=${dir}/${name}.txt
+
+if [ -f "$file" ] ; then
+   echo "Err: file $file already exists";
+   exit 1
+else
+   echo $file
+   echo $@ > "$file" 
+   if which xclip > /dev/null ; then
+      echo $file | xclip -sel clip
+   fi
+fi
+

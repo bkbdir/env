@@ -1,0 +1,52 @@
+SSH
+----
+
+## UTILS
+
+### Check ssh connection 
+
+   $ ssh -q user@downhost exit
+   $ echo $? -> 255
+
+   $ ssh -q user@uphost exit
+   $ echo $? ->  0
+
+ssh permissions
+
+## Permissions
+
+chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
+
+.ssh 0700
+
+.ssh/*.pub   0644
+
+
+.ssh/* 0600
+
+## Passwordless login
+
+
+### Change SSH Password
+
+   ssh-keygen -p -f ~/.ssh/id_dsa
+
+* Generate new key
+
+   ssh-keygen -b 4096 -t rsa -C "twik_profile: twik-token 2017-06-01" -f ~/.ssh/hostname-specialuser
+
+   ssh-keygen -t rsa -b 4096 -f ~/.ssh/mykey -C "your_email@example.com"
+
+    password for ssh keys are cached with [keychain](http://www.funtoo.org/Keychain)
+
+    how can I check my ssh password: ssh-keygen -y -f /mykey.rsa
+
+        this is printing the public key
+
+    Add ssh to ssh-agent 
+
+        ssh-add ~/.ssh/mykey
+
+
+
+

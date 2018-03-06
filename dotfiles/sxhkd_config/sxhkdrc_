@@ -1,0 +1,126 @@
+#F8
+#    $HOME/dev/edibin/prompt.sh
+
+super + k
+    /home/ben/dev/edibin/switch.sh
+    #sh /home/ben/test.sh
+    #xdotool key Ctrl+e ; xdotool key Ctrl+y 
+
+#ctrl + g
+#    echo xuckme > ~/dev/err
+
+#super + c
+    #/home/ben/dev/edibin/fred.sh
+
+# wm independent hotkeys
+#
+F8
+##bspc node focused -f last
+
+super + Return
+	urxvtcd
+
+super + space
+	dmenu_run
+
+    #open a "scratchpad" terminal (quake-style, in this case, on a 1366x768 display)
+
+
+#F9
+#    $HOME/dev/edibin/showpad.sh
+
+F9
+    xdotool search --onlyvisible --classname Fred windowunmap \
+        || xdotool search --classname Fred windowmap \
+        || urxvtc -name Fred -geometry 100x20 
+
+        #|| urxvtc -name URxvtFred -geometry 100x20 -e dash -c "bash ~/dev/edibin/fred.sh"
+
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# bspwm hotkeys
+#
+
+
+    
+super + alt + Escape
+#bspc quit
+
+super + k 
+	dmenu_run
+    
+super + w
+#bspc window -c
+
+super + n
+#bspc desktop -l next
+
+super + c 
+	#bsp#bspc node -f next
+
+super + u 
+	#bspc window -f last
+
+super + {grave}
+	#bspc {window,desktop} -f last
+
+super + apostrophe
+	#bspc window -s last
+
+super + {o,i}
+	#bspc control --record-history off; \
+	#bspc window {older,newer} -f; \
+	#bspc control --record-history on
+
+super + y
+	#bspc window -w last.!automatic
+
+super + m
+   #bspc desktop -l next
+
+super + {_,shift + }{h,j,k,l}
+	#bspc window -{f,s} {left,down,up,right}
+
+super + {_,shift + }c
+	#bspc window -f {next,prev}
+
+super + {comma,period}
+	#bspc desktop -C {backward,forward}
+
+super + bracket{left,right}
+	#bspc desktop -f {prev,next}
+
+super + ctrl + {h,j,k,l}
+	#bspc window -p {left,down,up,right}
+
+super + ctrl + {_,shift + }space
+	#bspc {window -p cancel,desktop -c}
+
+super + alt + {h,j,k,l}
+	#bspc window -e {left -10,down +10,up -10,right +10}
+
+super + alt + shift + {h,j,k,l}
+	#bspc window -e {right -10,up +10,down -10,left +10}
+
+super + ctrl + {1-9}
+	#bspc window -r 0.{1-9}
+
+super + {Left,Down,Up,Right}
+	xdo move {-x -20,-y +20,-y -20,-x +20}
+
+super + {_,shift + }{1-9,0}
+	#bspc {desktop -f,window -d} '^{1-9,10}'
+
+~button1
+	#bspc pointer -g focus
+
+super + button{1-3}
+	; #bspc pointer -g {move,resize_side,resize_corner}
+
+super + @button{1-3}
+	#bspc pointer -u
+
+super + {t,shift + t,s,f}
+   #bspc node -t {tiled,pseudo_tiled,floating,fullscreen}

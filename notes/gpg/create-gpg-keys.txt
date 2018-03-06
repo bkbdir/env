@@ -1,0 +1,6 @@
+Create gpg keys und subkeys
+============================
+
+
+gpg2 --expert --full-gen-key
+

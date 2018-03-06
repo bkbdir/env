@@ -1,0 +1,3 @@
+#!/usr/local/bin/dash
+
+refmt --parse re --print ml --interface false "$@"

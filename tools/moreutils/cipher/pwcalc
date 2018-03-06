@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Calculates a simple hash
+
+USAGE='[ -l length ] <string> [<Password>]'
+
+DEFAULTLENGTH=26
+
+arg=$1
+
+length=
+if [ "$arg" = '-l' ] ; then
+  length=$2
+  shift
+  shift
+else
+  length=$DEFAULTLENGTH
+fi
+[ -n "$length" ] || { echo "Err: no length";  exit 1; }
+
+string=$1
+password=$2
+
+[ -n "$string" ] || { echo "usage: $USAGE" ; exit 1; }
+
+
+
+if [ -z "$password" ] ; then
+  echo "Please: enter password"
+   read -s password
+ fi
+
+if [ -n "$length" ] ; then
+   printf "${password}${string}" | shasum | xxd -r -p | base64 | cut -c1-${length}
+else
+   printf "${password}${string}" | shasum | xxd -r -p | base64 | cut -c1-${defaultlength}
+fi

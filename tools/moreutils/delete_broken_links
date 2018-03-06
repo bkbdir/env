@@ -1,0 +1,8 @@
+#!/bin/sh
+
+dir=$1
+
+[ -n "$dir" ] || { echo "usage: dir" ; exit 1; }
+
+
+find -L $dir -maxdepth 1 -type l -delete

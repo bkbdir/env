@@ -1,0 +1,19 @@
+#!/bin/sh
+
+
+
+os=$(uname)
+
+case "$os" in
+   Darwin)
+      pbpaste
+      ;;
+   Linux)
+      # todo : only set DISPLAY if empty 
+      DISPLAY=:0 xclip -sel clip -o
+      ;;
+   *)
+      echo "Err: os $os not implemnted"
+      exit 1
+      ;;
+esac

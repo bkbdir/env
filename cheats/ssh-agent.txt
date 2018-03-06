@@ -1,0 +1,10 @@
+# SSH Agent
+
+## Restart Agent
+
+eg. because of error: Could not open a connection to your authentication agent
+
+   eval `ssh-agent -s`
+   ssh-add
+
+   ssh-add $mykey

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+
+# grep -lir $2 $1
+
+if [ -n "$2" ] ; then
+   grep -lir $2  $1
+else
+   grep -lir $2  .
+fi
+

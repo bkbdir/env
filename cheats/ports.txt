@@ -1,0 +1,7 @@
+Ports
+-----
+
+
+Apps running on port x
+
+   sudo lsof -n -i :80 | grep LISTEN

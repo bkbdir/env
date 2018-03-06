@@ -1,0 +1,21 @@
+Make Makefile
+--------------
+
+
+## Variables, Target, Source
+
+   target: source
+
+   $@         $<
+
+
+A simple example:
+
+   MLIFILES = m.mli
+   CMIFILES = $(MLIFILES:.mli=.cmi)
+
+   %.cmi: %.ml
+      ocamlc -c $<
+
+   all: $(CMIFILES)
+      ocamlc -o hello m.cmo hello.cmo

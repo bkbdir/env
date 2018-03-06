@@ -1,0 +1,26 @@
+#!/bin/sh
+
+
+secret=$1
+salt=$2
+length=$3
+
+usage (){
+	echo "usage: pbdf2 <secret> <salt> <length>"
+	exit 1;
+}
+
+[ -n "$secret" ] || usage
+[ -n "$salt" ] || usage
+[ -n "$length" ] || usage
+
+
+me=$(readlink -f $0)
+here=$(dirname $me)
+
+
+node $here/pbkdf2_base64.js "$secret" "$salt" $length
+
+
+
+

@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# Generate a password with a prefix a secret from passtab. Return the hash of input.
+
+USAGE='[ -p postfix ] <profilestring> (eg. "twik:bkb_1U0a.pwc"),  [<profile>]'
+
+passtab_profile="$HOME/tools/moreutils/bin/passtab-profile"
+
+die() { echo $@; exit 1; }
+
+[ -n "$1" ]  || die "usage: $USAGE" ;
+
+postfix=
+[ "$1" = '-p' ] && {
+   postfix=$2
+   shift
+   shift
+}
+
+profilestring=$1
+[ -n "$profilestring" ]  || die "usage: $USAGE" ;
+
+profile=$2
+
+string= tool= algo=
+if [ -n "$profile" ] ; then
+   string=$(perl -e '$ARGV[0] =~ /^([\_\-\:\w]+)\.(\w+)$/ && print $1;' "$profilestring")
+   [ -n "$string" ] || die "Err: no string in simple string $profilestring"
+   algo=$(perl -e '$ARGV[0] =~ /^([\_\-\:\w]+)\.(\w+)$/ && print $2;' "$profilestring")
+   [ -n "$algo" ] || die "Err: no algo in string $profilestring"
+else
+   string=$(perl -e '$ARGV[0] =~ /^(\w+)\:(\w+)\.(\w+)$/ && print $1 .":". $2;' "$profilestring")
+   [ -n "$string" ] || die "Err: no string in string $profilestring"
+   tool=$(perl -e '$ARGV[0] =~ /^(\w+)\:(\w+)\.(\w+)$/ && print $1;' "$profilestring")
+   [ -n "$tool" ] || die "Err: no tool in string $profilestring"
+   algo=$(perl -e '$ARGV[0] =~ /^(\w+)\:(\w+)\.(\w+)$/ && print $3;' "$profilestring")
+   [ -n "$algo" ] || die "Err: no algo in string $profilestring"
+
+   profile=$(perl -e '$ARGV[0] =~ /^(\w+)\:(\w+)\.(\w+)$/ && print $2;' "$profilestring")
+   [ -n "$profile" ] || die "Err: no profile in string $profilestring"
+fi
+
+stringpass_conf="$HOME/.auxconf/stringpass/$profile.conf"
+[ -f "$stringpass_conf" ] && source "$stringpass_conf"
+
+
+copy ()  {
+   local inp=$1
+   os=$(uname)
+   case "$os" in
+      Darwin) printf "$inp" | pbcopy ;;
+      Linux) printf "$inp" | DISPLAY=:0 xclip -sel clip ;;
+      *) echo "Err: couldn't copy in this OS $os"; exit 1; ;;
+  esac
+}
+p_w_calc () {
+   local string=$1
+   local password=$2
+
+   printf "${string}${password}" | shasum | xxd -r -p | base64
+}
+hash_a_pass () {
+   local string=$1
+   local password=$2
+
+   printf "$string" \
+   | openssl dgst -sha1 -binary -hmac "$password" \
+   | openssl enc -base64 \
+   | cut -c 1-16
+}
+
+passtab_string=
+if [ -f "$passtab_profile" ]; then
+   echo yyy ${passtab_profile} "$profile"
+   ${passtab_profile} "$profile"  
+   exit
+#   | while read inp ; do echo $inp ; done
+
+echo xxx
+exit 
+   passtab_string=$(${passtab_profile} "$profile")
+exit
+   [ "$?" -eq 0 ] || {
+      echo "Ask: Please enter Passtab string for profile '$profile'"
+      read -s passtab_string
+   }
+else
+   echo "Ask: Please enter Passtab string for profile '$profile'"
+   read -s passtab_string
+fi
+
+[ -n "$postfix_conf" ] && { # comes from ~ conf file
+   postfix=$postfix_conf
+}
+
+
+[ -n "$postfix" ] || {
+   echo "Ask: Password postfix"
+   read -s postfix
+}
+
+pwhash=$(p_w_calc "${passtab_string}" "${postfix}")
+
+[ -n "$pwctrl" ] && { # comes from ~/.auxconf/... file
+   [ "$pwhash" = "$pwctrl" ] || die "Err: something wrong with password (prefix/secret)"
+}
+   
+password="${passtab_string}${postfix}"
+stringpass=
+case "$algo" in
+   hap)
+         stringpass=$(hash_a_pass "$string" "$password")
+      ;;
+   pwc)
+      ;;
+   *)
+      die "Err: algo $algo not yet implementd"
+      ;;
+esac
+
+
+if [ -n "$postfix" ] ; then
+   printf "$stringpass"
+else
+   copy "$stringpass"
+fi

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+
+script=wisp-0.9.1.scm
+
+wisp=$HOME/tools/sw/wisp
+
+[ -d "$wisp" ] || { echo "Err: no wisp dir " $wisp ; exit 1 ; }
+
+
+wispscript=$wisp/$script
+
+[ -f "$wispscript" ] || { echo "Err: no wisp script " $wispscript ; exit 1 ; }
+
+
+guile ${wispscript} "$@"
+
+

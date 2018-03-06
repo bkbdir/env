@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Hashapass</title>
+<meta http-equiv="content-type" content="text-html; charset=utf-8">
+<meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
+<script language=JavaScript type="text/javascript" >
+var i=8;
+function j(f,h){f[h>>5]|=128<<24-h%32;f[(h+64>>9<<4)+15]=h;for(var b=Array(80),a=1732584193,c=-271733879,g=-1732584194,d=271733878,k=-1009589776,l=0;l<f.length;l+=16){for(var o=a,p=c,q=g,r=d,s=k,e=0;80>e;e++){b[e]=16>e?f[l+e]:(b[e-3]^b[e-8]^b[e-14]^b[e-16])<<1|(b[e-3]^b[e-8]^b[e-14]^b[e-16])>>>31;var t=m(m(a<<5|a>>>27,20>e?c&g|~c&d:40>e?c^g^d:60>e?c&g|c&d|g&d:c^g^d),m(m(k,b[e]),20>e?1518500249:40>e?1859775393:60>e?-1894007588:-899497514)),k=d,d=g,g=c<<30|c>>>2,c=a,a=t}a=m(a,o);c=m(c,p);g=m(g,q);d=
+m(d,r);k=m(k,s)}return[a,c,g,d,k]}function m(f,h){var b=(f&65535)+(h&65535);return(f>>16)+(h>>16)+(b>>16)<<16|b&65535}function n(f){for(var h=[],b=(1<<i)-1,a=0;a<f.length*i;a+=i)h[a>>5]|=(f.charCodeAt(a/i)&b)<<24-a%32;return h};window.update=function(){var f=document.getElementById("seedId");if(0==f.value.length)f.select();else{var h=document.getElementById("resultId"),b,a=f.value;b=document.getElementById("parameterId").value;var c=n(a);16<c.length&&(c=j(c,a.length*i));for(var g=Array(16),a=Array(16),d=0;16>d;d++)g[d]=c[d]^909522486,a[d]=c[d]^1549556828;b=j(g.concat(n(b)),512+b.length*i);b=j(a.concat(b),672);c="";for(a=0;a<4*b.length;a+=3){g=(b[a>>2]>>8*(3-a%4)&255)<<16|(b[a+1>>2]>>8*(3-(a+1)%4)&255)<<8|b[a+2>>2]>>8*(3-
+(a+2)%4)&255;for(d=0;4>d;d++)c=8*a+6*d>32*b.length?c+"":c+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(g>>6*(3-d)&63)}h.value=c.substr(0,16);f.value="";h.select()}};
+</script>
+</head>
+<body style="text-align: center"
+><form name=f action="javascript:update();"
+><h1 style="margin: 0 0 0.5em 0; padding: 0 0 0 0;">hashapass</h1
+><table id="maintable" style="margin: 0 auto;"  cellpadding=0 cellspacing=0 
+><tbody
+><tr
+><td style="text-align: right; font-size: 100%; padding: 0.4em 0.5em 0.4em 0;">Parameter</td>
+    <td><input id=parameterId name=parameter size="12" style="font-family: monospace; font-size: 115%;"></td>
+  </tr><tr>
+    <td style="text-align: right; font-size: 100%; padding: 0.4em 0.5em 0.4em 0">Master&nbsp;password</td>
+    <td><input type=password id=seedId name=seed size="12" style="font-family: monospace; font-size: 115%"></td>
+  </tr><tr>
+    <td style="text-align: right; font-size: 100%; padding: 0.4em 0.5em 0.4em 0"><input type=submit value="hashapass!"></td>
+    <td><input name=result id=resultId size="12" style="font-family: monospace; font-size: 115%">
+    </td></tr></tbody></table
+><script>
+document.getElementById('parameterId').focus();
+var promoHTML = null;
+if (navigator.userAgent.match(/Android.*Mobile/i)) {
+	promoHTML = '<td colspan="2" style="text-align: center; font-size: small;"><b>Upgrade?</b> Android app puts password directly into clipboard and remembers master password<br /><a href="http://market.android.com/details?id=com.hashapass.androidapp"><img src="http://www.android.com/images/brand/45_avail_market_logo2.png" alt="Available in Android Market" /></a></td>'; table.appendChild(promo);
+} else if (navigator.userAgent.match(/iPhone/i)) {
+  promoHTML = '<td colspan="2" style="text-align: center; font-size: small;"><b>Upgrade?</b><br> Free iPhone app by Renato Ribeiro puts password directly into clipboard, and more<br /><a style="font-size: medium;" href="https://itunes.apple.com/us/app/hashapass-password-generator/id598638144">Download from the Apple App Store</a></td>';
+}
+if (promoHTML != null) {
+  var table = document.getElementById('maintable');
+  var promo = document.createElement("tr");
+  promo.innerHTML = promoHTML;
+  table.appendChild(promo);
+}
+
+</script><div style="margin-top: 0.5em"><a href="index.html">Home</a></div>
+</form></body>
+</html>
+

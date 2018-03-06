@@ -1,0 +1,21 @@
+## Permissions
+
+         U   G   W
+        rwx rwx rwx     chmod 777 filename      
+        rwx rwx r-x     chmod 775 filename
+        rwx r-x r-x     chmod 755 filename
+        rw- rw- r--     chmod 664 filename
+        rw- r-- r--     chmod 644 filename (default file perm)
+
+        U = User / G = Group / W = World
+
+
+4 = Read
+2 = Write
+1 = eXecute
+
+7 = read + write + execute
+6 = read + write
+5 = read + execute
+(3 = write + execute)
+

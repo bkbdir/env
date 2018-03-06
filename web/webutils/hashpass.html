@@ -1,0 +1,81 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+	<script type="application/x-javascript" src="hashpass_files/msgpgen.js"></script>
+	<script type="application/x-javascript" src="hashpass_files/md5.js"></script>
+	<script type="application/x-javascript" src="hashpass_files/sha1.js"></script>
+	<script type="application/x-javascript" src="hashpass_files/sgp.js"></script>
+	<script type="application/x-javascript" src="hashpass_files/sha256.js"></script>
+
+	<script type="application/x-javascript" src="hashpass_files/sha512.js"></script>
+	<script type="application/x-javascript" src="hashpass_files/PwdHash-hashed-password.js"></script>
+	<script>
+		function hash(master,domain) {
+			passwordLength = parseInt(document.getElementById('passwordLength').value);
+			switch (document.getElementById('algorithm').selectedIndex){
+				case 0: return msgpgen.oldHash(domain+master);
+				case 1: return sgp.hash(master+''+domain, passwordLength);
+				case 2: return pwdHash.getHashedPassword(master, domain);
+				case 3: return hpg.hash(master,domain,passwordLength);
+				case 4: return md5.hex_md5(master+""+domain).substring(0,passwordLength);
+				case 5: return md5.b64_md5(master+""+domain).substring(0,passwordLength);
+				case 6: return sha1.hex_sha1(master+""+domain).substring(0,passwordLength);
+				case 7: return sha1.b64_sha1(master+""+domain).substring(0,passwordLength);
+				case 8: return sha256.hex_sha256(master+""+domain).substring(0,passwordLength);
+				case 9: return sha256.b64_sha256(master+""+domain).substring(0,passwordLength);
+				case 10: return sha256.hex_sha224(master+""+domain).substring(0,passwordLength);
+				case 11: return sha256.b64_sha224(master+""+domain).substring(0,passwordLength);
+				case 12: return sha512.hex_sha512(master+""+domain).substring(0,passwordLength);
+				case 13: return sha512.b64_sha512(master+""+domain).substring(0,passwordLength);
+				case 14: return sha256.hex_hmac_sha256(master,domain).substring(0,passwordLength);
+				case 15: return sha256.b64_hmac_sha256(master,domain).substring(0,passwordLength);
+			}
+		}
+	</script>
+	<title>Hash Password Generator Mobile</title>
+</head>
+<body>
+	<table>
+	<tbody><tr>
+
+		<td>Algorithm</td>
+		<td>
+		<select id="algorithm">
+			<option>Magic Password</option>
+			<option>SuperGenPass</option>
+			<option>PwdHash</option>
+			<option>Hash PassGen</option>
+
+			<option>Hex MD5</option>
+			<option>Base 64 MD5</option>
+			<option>Hex SHA1</option>
+			<option>Base 64 SHA1</option>
+			<option>Hex SHA256</option>
+			<option selected="selected">Base 64 SHA256</option>
+
+			<option>Hex SHA224</option>
+			<option>Base 64 SHA224</option>
+			<option>Hex SHA512</option>
+			<option>Base 64 SHA512</option>
+			<option>Hex HMAC SHA256</option>
+			<option>Base 64 HMAC SHA256</option>
+
+		</select></td>
+	</tr>
+
+	<tr><td>Length</td>
+	<td><input id="passwordLength" size="2" value="30"></td></tr>
+
+	<tr><td>Domain
+	</td><td><input id="site" value="value.a" onfocus='this.value == "example.com" ? this.value="" : false;' type="text"></td></tr>
+
+	<tr><td>Password 
+	</td><td><input id="password" type="password"></td></tr>
+
+	<tr><td>
+		<input value="Hash" onclick="document.getElementById('hashedPw').innerHTML=hash(document.getElementById('password').value, 
+			document.getElementById('site').value);document.getElementById('hashedPw').size=
+			document.getElementById('passwordLength').value;" type="submit"></td>
+	<td><div id="hashedPw">RheBoz7QCc2jWO/WiH3Ecsff/qxdnS</div></td></tr>
+
+
+</tbody></table></body></html>

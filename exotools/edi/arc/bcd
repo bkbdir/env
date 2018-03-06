@@ -1,0 +1,9 @@
+#!/bin/sh
+
+sess=$(tmux display-message -p '#S')
+win=$(tmux display-message -p '#I')
+pane=$(tmux display-message -p '#P')
+
+tmux send-keys -t "$sess:$win.1" "cd $1" C-m
+tmux send-keys -t "$sess:$win.0" "cd $1" C-m
+

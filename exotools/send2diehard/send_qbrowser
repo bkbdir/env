@@ -1,0 +1,28 @@
+#!/bin/sh
+
+
+bo=/home/bkb/.tools/moreutils/bin/qutebrowser_open
+
+exo=$HOME/.exo
+
+sshurl='bkb@diehard.fritz.box'
+ssh -q "$sshurl" exit
+
+if [ "$?" = "0" ]; then
+   ${exo}/tools/bin/exolog out "Ok($0): ssh connection to 'diehard' established"
+else
+   ${exo}/tools/bin/exolog err "Err($0): couldn't establish ssh connection to 'diehard'"
+   exit 1
+fi
+
+
+if [ -n "$QUTE_URL" ]; then # I this script is called inside qutebrowser
+   ssh "$sshurl" "export DISPLAY=:0; sh ${bo} $QUTE_URL"
+   ${exo}/tools/bin/exolog out "Ok($0): qutebrowser called with QUTE_URL"
+else
+   ssh "$sshurl" "export DISPLAY=:0; sh ${bo} $@"
+   ${exo}/tools/bin/exolog out "Ok($0): qutebrowser called"
+fi
+
+
+

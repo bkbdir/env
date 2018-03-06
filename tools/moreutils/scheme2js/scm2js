@@ -1,0 +1,29 @@
+#!/bin/sh
+
+realpath=$HOME/tools/utils/realpath
+[ -f "$realpath" ] || { echo "Err: no realpath"; exit 1; }
+
+thisdir=$(dirname $(${realpath} $0))
+
+script=$1
+[ -n "$script" ] || { echo "usage: script.scm"; exit 1 ; }
+
+scriptbase=$(basename $script)
+scriptdir=$(dirname $script)
+
+scriptname=${scriptbase%.*}
+
+
+out= app=
+if [ "$scriptdir" = "." ] ; then
+   out="${scriptname}.js"
+   app="${scriptname}-app.js"
+else
+   out="$scriptdir/${scriptname}.js"
+   app="$scriptdir/${scriptname}-app.js"
+fi
+
+scheme2js -o "$out"  "$script"
+cat $thisdir/runtime-cli.js "$out"  > $app
+
+nodejs $app

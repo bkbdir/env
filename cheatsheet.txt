@@ -1,0 +1,589 @@
+Cheatsheet
+==========
+
+(this file is generated (2017-10-23), pls do not edit)
+
+Table of Contents:
+
+-  applescript
+-  bash
+-  corona
+-  curl
+-  date
+-  diff
+-  fstab
+-  git
+-  gpg
+-  js
+-  luks
+-  make
+-  markdown
+-  network
+-  nfshost
+-  ocaml
+-  opam
+-  perl
+-  perloneliners
+-  permissions
+-  rsync
+-  shell
+-  ssh-agent
+-  ssh
+-  sxhdrc
+-  tmux
+-  tools
+-  untar
+-  urxvt
+-  vim
+-  x11
+-  xclip
+
+-------------
+
+Applescript 
+------------
+
+### Applescript in Bash and Shellscripts
+
+#### Applescript in Bash with Heredocs
+
+   text="Hello world"
+   osascript <<EOF
+   say "$text" using "Alex"
+   EOF
+
+Newlines allowed.
+
+   osascript -e 'set x to "a"
+   say x'
+
+### An applescript  script:
+
+   #!/usr/bin/env osascript
+
+   set x to "a"
+   say x
+
+### Creating an mac os x app in ~/Applications
+
+   mkdir -p ~/Applications/<APP_NAME>.app/Contents/MacOS
+   touch ~/Applications/<APP_NAME>.app/Contents/MacOS/<APP_NAME>
+   open -A TextEdit ~/Applications/<APP_NAME>.app/Contents/MacOS/<APP_NAME>
+
+Bash and utilies
+-----------------
+
+### Warn and Die
+
+warn () { echo "$*" }
+ 
+die () { echo "$*";  exit 1; }
+
+### Check for success/error
+
+   if [ $? -eq 0 ] ; then echo "Success"; fi
+
+### Check for true
+
+   state=true   ##  state=false
+   
+   if $state; then echo "True" ; fi
+
+### Check multiple Conditions
+
+   if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ]
+or
+    if [ $CHECK -ne 0 ] && [ $CHECK2 -eq 0 ] ; then
+
+
+### redirect sterr to stdout: 
+   
+   command 2>&1
+
+## compare two file modification
+
+if [ "$output" -nt "$input" ]; then
+
+
+### Detect errorcode 
+
+   [ "$?" -eq 0 ] || { echo "Err: could not detect os with uname" ; exit 1 ;} 
+
+or 
+   os=$(uname) || { echo "Err: could not detect os with uname" ; exit 1 ;} 
+
+
+
+
+### Filename & Extension
+
+    filename=$(basename "$fullfile")
+    extension="${filename##*.}"
+    filename="${filename%.*}"
+
+    allextensions="${filename#*.}"
+
+
+broken symbolic link:
+
+   ! -e broken.link
+
+#### Case
+    case $foo in
+        bar)
+            echo "bb"
+        ;;
+        *)
+            echo "dddefault"
+        ;;
+    esac
+    
+#### remove whitespace
+
+    tr -d ' '
+   
+
+
+
+CoronaSdk
+----------
+
+
+"/Applications/CoronaSDK/Corona Simulator.app/Contents/MacOS/Corona Simulator" ~/CoronaApps/MyApp
+
+Curl
+----
+
+Uploadsl with curl
+
+   -T : that file
+   -k : disabling a certificate error
+   -u : user
+
+   curl --ftp-ssl -T test.txt -k -u "ben:MYPASSWD" "ftp://ftp.auxdir.com/"
+
+date:
+
+date "+%y-%m-%d"
+
+2017-07-25
+
+diff
+----
+
+* only show filenames
+   
+   diff -qr dir1 dir2
+
+
+Fstab / Samba
+------------
+
+remount fstab without logout: 
+
+   sudo mount -a
+
+
+# Git
+
+#### Forking workflow (simple)
+
+    - fork repo in github
+    - clone local copy
+    - create branch
+          git checkout -b perlb
+    - after editing, and commit, do push to branch
+        git push origin perlb
+
+### Git
+
+#### update a repo ...
+
+   git pull origin master
+
+#### workflow with multiple accounts
+
+in ~/.ssh/config:
+  
+    Host github.com-auxsend 
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/auxsend_github
+
+    in local .git/config
+
+        git@github.com-auxsend:auxsend/gambit.git
+
+
+
+
+
+
+Gpg / gnupg / pgp
+------------------
+
+
+gpg -k # list public keys
+
+	sec: (sec)ret key
+	ssb: (s)ecret (s)u(b)-key
+	pub: (pub)lic key
+	sub: public (sub)-key
+
+
+
+Javascript
+----------
+
+
+### get the current URL
+
+   window.location.toString()
+
+## Luks
+
+sudo cryptsetup luksClose /dev/mapper/locsecvault
+sudo umount /media/localvault
+
+### Setup a luks based container
+
+    dd if=/dev/urandom of=(pwd)/localvault_mallrats.luks  bs=1M count=1000
+    sudo cryptsetup -y luksFormat ./localvault_mallrats.luks
+    sudo cryptsetup luksOpen ./localvault_mallrats.luks  localvault
+    sudo mkfs.ext4 -j /dev/mapper/localvault
+    sudo mkdir /media/localvault
+    sudo mount /dev/mapper/localvault  /media/localvault
+
+And the unmount process
+
+    sudo cryptsetup luksClose /dev/mapper/localvault
+    sudo umount /dev/mapper/localvault
+
+Make Makefile
+--------------
+
+
+## Variables, Target, Source
+
+   target: source
+
+   $@         $<
+
+
+A simple example:
+
+   MLIFILES = m.mli
+   CMIFILES = $(MLIFILES:.mli=.cmi)
+
+   %.cmi: %.ml
+      ocamlc -c $<
+
+   all: $(CMIFILES)
+      ocamlc -o hello m.cmo hello.cmo
+
+Markdown
+--------
+
+links
+[index](rsc/markdown/markdown/index.html)
+
+
+
+Network
+--------
+
+
+### which process runs on port
+
+    sudo netstat -lpn | grep :8080
+
+
+### Nearlyfreespeech
+
+    how to turn on file index
+        .htaccess file for that directory: Options +Indexes
+fossil clone ssh://repos.auxsend.org//home/public/env.fossil env.fossil
+
+Ocaml
+-----
+
+### Compilation
+
+Compile with scheme syntax
+
+      ocamlc -c -pp "camlp5r pa_scheme.cmo pr_o.cmo" hello.ml
+
+
+## Reset Opam 
+
+For fish shell:
+
+   eval (opam config --shell=fish env)
+
+
+Perl
+----
+
+### grep 
+   print grep { $_ =~ /$regex/ } <>;
+
+### regex case insesitive
+
+   if ($str1 =~ /^$str2$/i) { ... }
+
+### variable with scriptname
+   $0
+
+### dirname
+
+   use File::Basename
+
+   $d = dirname(fullname)
+
+### remove all newlines
+
+    $line =~ s/\015?\012?$//;
+
+
+### file slurp 
+
+    open(my $f, '<', $filename) or die "Err $filename: $!\n";
+    $string = do { local($/); <$f> };
+    close($f);
+
+### os name
+
+   use POSIX qw(uname);
+   my @uname = uname();
+   print $uname[0] . " " . $uname[2];
+
+
+
+Perl Oneliners
+--------------
+
+-e '...'                   program
+-s='...'        command line arg
+
+cat /etc/hosts | perl -sne '/localhost/ && print $d ' /etc/hosts -- -d='"success!"'
+
+perl -se  '/whatever/ && print  for <>' -- -u=diamond /etc/hosts 
+
+
+### Looping: 
+
+-n                assume 'while (<>) { ... }' loop around program
+-p                assume loop like -n but print line also, 
+-l                print endline
+-i[extension]   edit <> files in place (makes backup if extension supplied)
+
+
+### Splitting
+
+## Permissions
+
+         U   G   W
+        rwx rwx rwx     chmod 777 filename      
+        rwx rwx r-x     chmod 775 filename
+        rwx r-x r-x     chmod 755 filename
+        rw- rw- r--     chmod 664 filename
+        rw- r-- r--     chmod 644 filename (default file perm)
+
+        U = User / G = Group / W = World
+
+
+4 = Read
+2 = Write
+1 = eXecute
+
+7 = read + write + execute
+6 = read + write
+5 = read + execute
+(3 = write + execute)
+
+
+Rsync
+-----
+
+
+    rsync -avz -e "ssh" . plainxt.org:
+
+    exclude with: --exclude '*\.git'
+
+    - "plainxt.org" is in ~/.ssh/config
+    - don't forget the colon
+    - a: archive, z: compress, v: verbose
+
+
+# Shell scripting
+
+## read silent
+
+echo "pw:"
+read -s pw
+
+# SSH Agent
+
+## Restart Agent
+
+eg. because of error: Could not open a connection to your authentication agent
+
+   eval `ssh-agent -s`
+   ssh-add
+
+   ssh-add $mykey
+
+SSH
+----
+
+## UTILS
+
+### Check ssh connection 
+
+   $ ssh -q user@downhost exit
+   $ echo $? -> 255
+
+   $ ssh -q user@uphost exit
+   $ echo $? ->  0
+
+ssh permissions
+
+## Permissions
+
+chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
+
+.ssh 0700
+
+.ssh/*.pub   0644
+
+
+.ssh/* 0600
+
+## Passwordless login
+
+
+### Change SSH Password
+
+   ssh-keygen -p -f ~/.ssh/id_dsa
+
+* Generate new key
+
+   ssh-keygen -b 4096 -t rsa -C "twik_profile: twik-token 2017-06-01" -f ~/.ssh/hostname-specialuser
+
+   ssh-keygen -t rsa -b 4096 -f ~/.ssh/mykey -C "your_email@example.com"
+
+    password for ssh keys are cached with [keychain](http://www.funtoo.org/Keychain)
+
+    how can I check my ssh password: ssh-keygen -y -f /mykey.rsa
+
+        this is printing the public key
+
+    Add ssh to ssh-agent 
+
+        ssh-add ~/.ssh/mykey
+
+
+
+
+
+Sxhdrc
+------
+
+reload:
+   pkill -USR1 -x sxhkd
+
+Tmux
+----
+
+### Name of the current session:
+
+    tmux display-message -p '#S'
+
+#### Name of active window
+
+   tmux display-message -p '#W'
+
+with target: 
+
+   mux -t "target-window" display-message -p '#W'
+
+
+
+
+Tools
+-----
+
+
+### Tools
+
+menu tools:
+    https://github.com/garybernhardt/selecta
+
+
+Tar
+---
+
+### untar a .zx file
+
+    tar -xJf file.pkg.tar.xz
+
+### create a tarball without the entire file tree
+
+- use "-C"
+- exclude stuff with "--exclude=.git"
+
+   tar --exclude='.git' -z -c -v -f  foo.tar.gz -C /usr/local foo 
+
+
+Urxvt
+-----
+
+search window with urxvt and vifm 
+
+> urxvtc -geometry 130x30 -e bash -c "vifm -f /home/ben/.vim/"
+
+
+
+Vim
+----
+
+### Editing
+
+    open file read-only: vim -R
+
+    remote files:
+        new server: vim –servername SERVER file1.txt
+
+        open file in this remote server:
+            vim –servername SERVER –remote-tab file2.txt file3.txt
+
+
+### Graphical Vim 
+
+   config example:
+      if has("gui_running")
+     syntax on
+     set hlsearch
+     colorscheme macvim
+     set bs=2
+     set ai
+     set ruler
+   endif
+
+X11
+----
+
+reload .Xresources: 
+
+   xrdb ~/.Xresources
+
+or
+
+   xrdb -merge .Xresources
+
+
+Xclip
+-----
+
+    choose xsel over xclip because of error "  Error: target STRING not available" when starting script from tmux.conf.
+

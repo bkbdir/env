@@ -1,0 +1,5 @@
+Sxhdrc
+------
+
+reload:
+   pkill -USR1 -x sxhkd

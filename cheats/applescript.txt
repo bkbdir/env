@@ -1,0 +1,29 @@
+Applescript 
+------------
+
+### Applescript in Bash and Shellscripts
+
+#### Applescript in Bash with Heredocs
+
+   text="Hello world"
+   osascript <<EOF
+   say "$text" using "Alex"
+   EOF
+
+Newlines allowed.
+
+   osascript -e 'set x to "a"
+   say x'
+
+### An applescript  script:
+
+   #!/usr/bin/env osascript
+
+   set x to "a"
+   say x
+
+### Creating an mac os x app in ~/Applications
+
+   mkdir -p ~/Applications/<APP_NAME>.app/Contents/MacOS
+   touch ~/Applications/<APP_NAME>.app/Contents/MacOS/<APP_NAME>
+   open -A TextEdit ~/Applications/<APP_NAME>.app/Contents/MacOS/<APP_NAME>

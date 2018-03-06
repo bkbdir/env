@@ -1,0 +1,6 @@
+## Reset Opam 
+
+For fish shell:
+
+   eval (opam config --shell=fish env)
+

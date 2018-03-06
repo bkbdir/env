@@ -1,0 +1,66 @@
+" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+"call plug#begin('~/.vim/plugged')
+"Plug 'https://github.com/Alok/notational-fzf-vim'
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Initialize plugin system
+"call plug#end()
+"
+
+let mapleader=","
+let maplocalleader=","
+
+
+set nu
+set noerrorbells
+set vb t_vb=
+
+
+set nocompatible
+behave xterm
+filetype plugin indent on
+syntax on
+
+if !empty(glob(expand("~/.vim/bundle")))
+   execute pathogen#infect()
+
+	au VimEnter * RainbowParenthesesToggle
+	au Syntax * RainbowParenthesesLoadRound
+	au Syntax * RainbowParenthesesLoadSquare
+	au Syntax * RainbowParenthesesLoadBraces
+endif
+
+
+
+for fpath in split(globpath('~/.vimrc.d/', '*.vim'), '\n')
+  exe 'source' fpath
+endfor
+
+if has("gui_running")
+syntax on
+	set hlsearch
+	colorscheme slate
+	set	guifont=Monaco:h15
+	set bs=2
+	set ai
+	set ruler
+endif
+
+set laststatus=2
+
+au VimEnter * syntax keyword Statement lambda conceal cchar=λ
+au VimEnter * hi! link Conceal Statement
+au VimEnter * set conceallevel=2
+set ruler
+
+au BufReadPost *.w set syntax=perl
+
+" Faster buffer switch
+nnoremap <Leader>b :ls<CR>:b<Space>
+
+
+
+syntax enable
+set smartindent
+set tabstop=2
+set shiftwidth=2
+set expandtab

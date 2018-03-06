@@ -1,0 +1,6 @@
+Mac os x
+--------
+
+### open a DMG
+
+   hdiutil attach /path/to/diskimage.dmg

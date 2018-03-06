@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+# Creates a hash compatible to th hashpass tool
+
+[ "$#" = '2' ] || { echo "Usage: $0 passw salt" ; exit 1; }
+
+perl -MDigest::SHA=sha256_base64 -e \
+    'print(substr( sha256_base64($ARGV[0] . ":" . $ARGV[1]), 0,  20))' "$@"

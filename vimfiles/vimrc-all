@@ -1,0 +1,511 @@
+"aZ: saving with esc
+"modifiable off because errors in tmboxbrowser
+set modifiable
+autocmd BufWinEnter * setlocal modifiable
+
+
+
+set shell=bash
+
+"enable hidden buffers
+set hidden
+
+" open new buffers below
+set splitbelow
+
+" Markdown 
+" for fenced codeblock with markdown 
+"let g:markdown_fenced_languages = ['pl=perl' ,'c', 'html', 'vim', 'ruby', 'python', 'bash=sh']
+"autocmd BufNewFile,BufReadPost *.{md,lit} set filetype=markdown
+"
+" vim-pandoc
+let g:pandoc#syntax#codeblocks#embeds#langs = ["ruby", "pl=perl", "perl",  "bash=sh"]
+
+
+"set shortmess=a
+"et cmdheight=2
+
+let g:netrw_browsex_viewer = "w3m"
+execute pathogen#infect()
+" ,t,td
+"map <Esc><Esc> :w<CR>
+"A
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+  " => General 
+" sdjf<
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sets how many lines of history VIM has to remember
+set history=70
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+set nocompatible 
+set modelines=4 
+"unfolded is default
+set foldlevel=99
+"let g:tagbar_type_perl = {
+    "\ 'ctagstype' : 'perl',
+    "\ 'kinds'     : [
+    "\ 'p:packages',
+    "\ 'o:ours',
+    "\ 'c:constants',
+    "\ 'f:formats',
+    "\ 'l:labels',
+    "\ 's:subroutines',
+    "\ 'x:xlosures',
+    "\ ]
+"\ }
+
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+
+let g:mapleader = ","
+command! -nargs=1 Silent
+\ | execute ':w'
+\ | execute <q-args>
+\ | execute ':silent !'.<q-args>
+\ | execute ':redraw!'
+    "\ | execute ':silent !tmux send-keys -t 0:0 make Enter'
+    "\ | execute <q-args>
+    "\ | execute ':silent !'.<q-args>
+    "\ | execute ':redraw!'
+
+
+" A wrapper function to restore the cursor position, window position,
+" and last search after running a command.
+function! Preserve(command)
+      " Save the last search
+      let last_search=@/
+      " Save the current cursor position
+      let save_cursor = getpos(".")
+      " Save the window position
+      normal H
+      let save_window = getpos(".")
+      call setpos('.', save_cursor)
+
+      " Do the business:
+      execute ':wa'
+      execute  a:command 
+      "execute ':silent !'. a:command
+
+
+      " Restore the last_search
+      let @/=last_search
+      " Restore the window position
+      call setpos('.', save_window)
+      normal zt
+      " Restore the cursor position
+      call setpos('.', save_cursor)
+endfunction
+
+
+nmap ZZ <esc>:wq<cr>
+
+"nmap <c-c> <esc>:w<cr>
+"imap <c-c> <esc>:w<cr>
+
+"nmap <leader>, <esc>:w<cr>
+"imap <leader>, <esc>:w<cr>
+
+
+command! -nargs=1 Silento
+\ | execute ':silent !'.<q-args>
+\ | execute ':redraw!'
+
+
+function! Viruntest()
+    silent !clear
+    make! vitest 
+endfunction
+
+
+
+"nmap <c-r> <esc>:silent! make run<cr>
+
+"nmap <silent> <leader>r <esc>:call Preserve("!sh ~/ide/bin/virun")<cr><cr><cr>
+"imap <silent> <leader>r <esc>:call Preserve("!sh ~/ide/bin/virun")<cr><cr><cr>
+"nmap <silent> <leader>t <esc>:call Preserve("make vitest")<cr><cr><cr>
+"nmap <silent> <leader>t <esc>:exe ':silent !make virun <cr>:redr!<cr><cr>
+"map <F5> :exe ':silent !make virun'<CR>:redr!<CR>
+"
+nnoremap ,t :w<cr>:Tagbar<cr>
+nnoremap ,, :w<cr><C-w>h
+
+"nmap <Esc> <esc>:w<cr>
+"
+"nmap <silent> <leader>R <esc>:call Preserve("make -f Makefile.mk run")<cr>
+"nmap <silent> <leader>r <esc>:call system("make -f Makefile.mk run")<cr>
+"nmap <F5>:call system("make -f Makefile.mk run")<cr>
+"imap <F5> <esc>:w \| call system("make -f Makefile.mk run")<cr>
+" stay in insert mode
+"imap <F5> <c-o>:w<CR><c-o>:call system("make -f Makefile.mk run")<cr>
+"inoremap <F4> <c-o>:w<cr>
+
+"noremap <F5>:w<cr>
+
+"nmap <c-r> <esc>:silent! make run<cr>
+
+"imap <c-r> <esc>:call Preserve("make -f Makefile.mk run")<cr>
+"imap <leader>r <esc>:call Preserve("make -f Makefile.mk run")<cr><cr>
+
+"imap <c-t> <esc>:call Preserve("make -f Makefile.mk test")<cr>
+"nmap <c-t> <esc>:call Preserve("make -f Makefile.mk test")<cr>
+
+"nmap <leader>r <esc>:call system("make -f Makefile.mk run")<cr><cr>
+"noremap <c-r> <esc>:call system("make -f Makefile.mk run")<cr>
+inoremap <c-r> <esc>:w<cr>:call system("make -f Makefile.mk run")<cr>
+"imap <leader>r <esc>:call system("make run")<cr>
+
+"nmap <c-e> <esc>:Silent make eval<cr>
+
+"imap <c-te> <esc>:Silent make eval<cr>
+" Configure backspace so it acts as it should act
+"set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+
+" Enable syntax highlighting
+syntax enable
+au BufNewFile,BufRead *.msh set filetype=scheme
+au BufNewFile,BufRead *.l set filetype=scheme
+au BufNewFile,BufRead *.nl set filetype=scheme
+au BufNewFile,BufRead,BufReadPost *.rkt,*.rktl,*.rktd set filetype=scheme
+
+au BufNewFile,BufRead *.lp set filetype=noweb
+au BufNewFile,BufRead *.pl.md set filetype=perl
+au BufNewFile,BufRead *.lit.pl set filetype=perl
+au BufNewFile,BufRead *.sh.md set filetype=sh
+au BufNewFile,BufRead *.scm.md set filetype=scheme
+au BufNewFile,BufRead *.wsp.md set filetype=scheme
+au BufNewFile,BufRead *.lit.wsp set filetype=scheme
+au BufNewFile,BufRead *.ml.md set filetype=ocaml
+au BufNewFile,BufRead *.dart.md set filetype=dart
+au BufNewFile,BufRead *.lit.txt set filetype=text
+au BufNewFile,BufRead *.sws.md set filetype=sws
+
+
+colorscheme desert
+set background=dark
+
+function! GuiTabLabel()
+    return substitute( expand( '%:p' ), '.\+\/\(.\+\)\/.\+', '\1', '' )
+endfunction
+" Set extra options when running in GUI mode
+"if has("gui_running")
+"   set guifont=Monaco:h14
+"   set guioptions-=T
+"   set guioptions+=e
+"   set t_Co=256
+"   set guitablabel=%{GuiTabLabel()}
+"   "set guitablabel=%M\ %t
+"ndif
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Be smart when using tabs ;)
+set smarttab
+set smartindent
+set tabstop=3
+   
+set shiftwidth=3
+
+" 1 tab == 4 spaces
+
+" Linebreak on 500 characters
+set lbr
+set tw=501
+
+set ai "Auto indent
+set wrap "Wrap lines
+
+
+map <C-W>a <C-W>j
+map <C-W>W <C-W>k
+" Smart way to move between windows
+"map <C-a> <C-W>j
+"map <C-k> <C-W>k
+"map <C-h> <C-W>h
+"map <C-l> <C-W>l
+" resize window CTRL+(h|j|k|l)
+"
+"noremap <A-a> :resize +1<CR>
+" ### for mac
+"noremap å :resize +1<CR>
+"noremap ˚ :resize -1<CR>
+"noremap ˙ :vertical resize -1<CR>
+"noremap ¬ :vertical resize +1<CR>
+
+" resize current buffer by +/- 5 
+nnoremap <up> :resize +2<cr>
+nnoremap <down> :resize -2<cr>
+nnoremap <left> :vertical resize -5<cr>
+nnoremap <right> :vertical resize +5<cr>
+
+"noremap <silent> f :call Preserve("! sh $HOME/hob/bin/vimhob")<CR><cr>
+
+" closing the buffer without closing window
+" http://stackoverflow.com/questions/1444322/how-can-i-close-a-buffer-without-closing-the-window
+nnoremap <silent> <Leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
+
+" working with tabs
+" " tab navigation like firefox
+nnoremap <C-S-tab> :tabprevious<CR>
+"nnoremap <C-tab>   :tabnext<CR>
+"nnoremap <C-t>     :tabnew<CR>
+inoremap <C-S-tab> <Esc>:tabprevious<CR>i
+"inoremap <C-tab>   <Esc>:tabnext<CR>i
+"inoremap <C-t>     <Esc>:tabnew<CR>
+
+""""""""""""""""""""""""""""""
+" => Status line
+""""""""""""""""""""""""""""""
+" Always show the status line
+set laststatus=2
+
+" Format the status line
+"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+
+nnoremap F f
+
+nnoremap j a
+vnoremap j a
+nnoremap a j
+vnoremap a j
+"imap <c-a> <esc>ai
+"imap <c-k> <esc>ki
+"imap <c-h> <esc>hi
+"imap <c-l> <esc>l i
+"imap <c-x> <esc>x i
+"imap <c-u> <esc>u i
+"imap <c-A> <esc>A
+"imap <c-w> <esc>:w<CR>
+"imap <c-d> <esc>ddi
+"imap <c-o> <esc>o
+"
+" insert mode
+"imap <C-b> <Left>
+"imap <C-f> <Right>
+"imap <C-a> <C-o>:call <SID>home()<CR>
+"imap <C-e> <End>
+"imap <M-b> <C-o>b
+"imap <M-f> <C-o>e<Right>
+"imap <C-d> <Del>
+"imap <C-h> <BS>
+"imap <M-d> <C-o>de
+"imap <M-h> <C-w>
+"imap <C-k> <C-r>=<SID>kill_line()<CR>
+"" cmd mode
+"cmap <C-a> <Home>
+"cmap <C-e> <End>
+"cmap <M-b> <S-Left>
+"cmap <M-f> <S-Right>
+
+function! s:home()
+  let start_col = col('.')
+  normal! ^
+  if col('.') == start_col
+    normal! 0
+  endif
+  return ''
+endfunction
+
+function! s:kill_line()
+  let [text_before_cursor, text_after_cursor] = s:split_line_text_at_cursor()
+  if len(text_after_cursor) == 0
+    normal! J
+  else
+    call setline(line('.'), text_before_cursor)
+  endif
+  return ''
+endfunction
+
+function! s:split_line_text_at_cursor()
+  let line_text = getline(line('.'))
+  let text_after_cursor  = line_text[col('.')-1 :]
+  let text_before_cursor = (col('.') > 1) ? line_text[: col('.')-2] : ''
+  return [text_before_cursor, text_after_cursor]
+endfunction
+
+" shortcuts to ESC
+"ino ,, <esc>
+"cno ,, <c-c>
+vno v <esc>
+
+
+set nu
+
+" scala
+
+"Hello world! 
+" single char insert (atomic)
+" http://stackoverflow.com/questions/1557893/making-inserting-a-single-character-in-vim-an-atomic-operation
+noremap <silent> <space> :exe "normal i".nr2char(getchar())<CR>
+
+au BufRead,BufNewFile *.nw    set filetype=noweb
+
+if filereadable(".vimrc_local")
+    so .vimrc_local
+else
+    if filereadable("../.vimrc_local")
+         so .vimrc_local
+    endif
+endif
+
+let g:slimv_swank_cmd = '!osascript -e "tell application \"Terminal\" to do script \"sbcl --load ~/.vim/bundle/slime/slime/start-swank.lisp\""'
+
+" working with tags
+" following a tag
+"nnoremap <Enter> <c-]>
+"nnoremap <bs> <esc>:pop <cr>
+
+" taglist setting for noweb (look in ~/.ctags)
+let tlist_noweb_settings = 'noweb;d:definition'
+"nmap <leader>t <esc>:TlistToggle<cr>
+
+" For syntax/noweb.vim
+au BufNewFile,BufRead *.nw set filetype=noweb
+au BufNewFile,BufRead *.lp set filetype=noweb
+"autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+let noweb_backend = "markdown"
+let noweb_language = "perl"
+let noweb_fold_code = 0
+
+" taboo tabs under : https://github.com/gcmt/taboo.vim.git
+set guioptions-=e
+"Taboo is able to remember tab names when you save the current session but you are required to set the following option in your .vimrc file
+set sessionoptions+=tabpages,globals
+
+
+
+" mac os x clipboard copy/paste
+set clipboard=unnamed
+
+" copy directly to clipboard
+vmap <C-c> :w !xclip -sel clip  <cr>
+
+
+"Use TAB to complete when typing words, else inserts TABs as usual.
+"Uses dictionary and source files to find matching words to complete.
+
+"See help completion for source,
+"Note: usual completion is on <C-n> but more trouble to press all the time.
+"Never type the same word twice and maybe learn a new spellings!
+"Use the Linux dictionary when spelling is in doubt.
+"Window users can copy the file to their machine.
+"function! Tab_Or_Complete()
+" if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+"   return "\<C-N>"
+" else
+"   return "\<Tab>"
+" endif
+"ndfunction
+"inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+"set dictionary="/usr/dict/words"
+
+"autocmd BufRead,BufNewFile  *.mbox  set filetype=tmboxbrowser
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+"nnoremap <C-tab>   :tabnext<CR>
+imap <C-tab> <c-x><c-o>
+
+autocmd FileType make setlocal noexpandtab
+let g:SuperTabDefaultCompletionType = 'context'
+
+function! Luck(filetype,start,end,textSnipHl) abort
+  let ft=toupper(a:filetype)
+  let group='textGroup'.ft
+  if exists('b:current_syntax')
+    let s:current_syntax=b:current_syntax
+    " Remove current syntax definition, as some syntax files (e.g. cpp.vim)
+    " do nothing if b:current_syntax is defined.
+    unlet b:current_syntax
+  endif
+  execute 'syntax include @'.group.' syntax/'.a:filetype.'.vim'
+  try
+    execute 'syntax include @'.group.' after/syntax/'.a:filetype.'.vim'
+  catch
+  endtry
+  if exists('s:current_syntax')
+    let b:current_syntax=s:current_syntax
+  else
+    unlet b:current_syntax
+  endif
+  execute 'syntax region textSnip'.ft.'
+  \ matchgroup='.a:textSnipHl.'
+  \ start="'.a:start.'" end="'.a:end.'"
+  \ contains=@'.group
+endfunction
+
+
+let g:exts = { "text": "txt", "go": "go", "make": 'mk', "sh": "sh", "c": '\(c\|\h\)', "scheme": '\(scm\|wsp\)', "ocaml": '\(ml\|mli\)' , "perl": "pl", "dart": "dart" }
+let g:strpl = '^\s*\(````\|\~\~\~\~\).*\.'
+let g:trpl = '^\(````\|\~\~\~\~\)\s*$'
+
+function Lucker()
+   for i in  keys(g:exts) 
+         let ext = g:exts[i]
+          "echo i
+         "call Luck(perl, '^\s*```\s*\.pl\s*', '^\s*```\s*$', 'SpecialComment')
+         call SyntaxRange#Include(g:strpl.ext, g:trpl, i, 'NonText')
+   endfor
+   "call Luck('markdown', '^\s*\(>.*\)', '^@\s*', 'SpecialComment')
+   "syn region dash start=/^`.\+/ end=/$/ oneline
+   syn region dash start=/^\s*#ifdef\s\+.\+/ end=/$/ oneline
+   syn region dash start=/^\s*#endif\s*/ end=/$/ oneline
+   syn region dash start=/^#\+.*$/ end=/$/ oneline
+   syn region dash start=/^\(```\|\~\~\~\)\s*/ end=/$/ oneline
+   syn region dash start=/^\(```\|\~\~\~\)\s*\..\+/ end=/$/ oneline
+   syn region dash start=/^>>.*/ end=/$/ oneline
+   syn region codeline start=/^\*.*/ end=/$/ oneline
+   syn region codeline start=/^+.*/ end=/$/ oneline
+   syn region codeline start=/^\-.*/ end=/$/ oneline
+   syn region codeline start=/^%.*/ end=/$/ oneline
+   highlight link dash Comment
+   highlight link codeline String
+	call SyntaxRange#Include('^>>\(>\s*\|#\+.\+\)$', '^>\s*$', 'markdown', 'NonText')
+  call SyntaxRange#Include('^<!--.*$', '^-->\s*$', 'text', 'NonText')
+endfunction
+
+autocmd Filetype sws  call Lucker()
+"autocmd Filetype perl  call Lucker()
+autocmd Filetype scheme  call Lucker()
+autocmd Filetype sh  call Lucker()
+autocmd Filetype ocaml  call Lucker()
+autocmd Filetype dart  call Lucker()
+autocmd Filetype markdown  call Lucker()
+autocmd Filetype text  call Lucker()
+
+"autocmd Filetype make  call  SyntaxRange#Include('^define\s\+.*$','^endef\s*$', 'lisp', 'NonText')
+
+let g:rainbow_active = 1
+
+" show the greek symbol for 'lambda'
+if has('conceal')
+    if has('autocmd')
+        autocmd Syntax * syn keyword Operator lambda conceal cchar=λ
+        autocmd Syntax ruby syn match rubyKeyword "->" conceal cchar=λ
+        autocmd Syntax haskell syn match hsKeyword "\\" conceal cchar=λ
+    endif
+    hi! link Conceal Operator
+    set conceallevel=2
+ else
+    echo 'ffff'
+endif
+
+" Vim indentLine
+let g:indentLine_color_term = 7
+set list lcs=tab:\|\ 
+"highlight LeadingTab ctermbg=darkblue guibg=darkblue
+"au Syntax * syn match LeadingTab /^\t\+/
+"
+"dart
+if has('vim_starting')
+	set nocompatible
+	set runtimepath+=~/.vim/bundle/dart-vim-plugin
+endif

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+trash=$HOME/trash
+
+item=$1
+
+[ -n "$item" ] || { echo "usage: item" ; exit 1; }
+[ -e "$item" ] || { echo "Err(del): item not exist" ; exit 1; }
+
+
+stamp=$(date "+%F_%H-%M-%S")
+mkdir -p $trash/$stamp
+
+mv $item $trash/$stamp/
+
+
+
+
+
+
+
+
+
+
+

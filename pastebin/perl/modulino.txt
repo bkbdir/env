@@ -1,0 +1,13 @@
+# A modulino in Perl
+
+> ben@auxdir.com, Jan. 28. 2017
+> perl, modules
+
+
+#!/usr/bin/perl
+
+__PACKAGE__->run() unless caller;
+
+sub run {
+    print "Hello World!\n";
+    }

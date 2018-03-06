@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/Volumes/Card/userdir/usernodes_bkb_card01/srctxt.src-store_node.pub/mobiledev/ios/nuremoting'
+let g:netrw_dirhist_2='/Users/bkb/test'
+let g:netrw_dirhist_3='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/aux.sec-data_inode.lan/lansec/ssh-files'
+let g:netrw_dirhist_4='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/bkb.dev-data_inode.pub/benkb.repo/sxperl/My/Lisp/Comp'
+let g:netrw_dirhist_5='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/aux-bkb.repo-data_inode.pub/env/tools/cmds'
+let g:netrw_dirhist_6='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/bkb.dev-data_inode.pub/benkb.repo/sxperl/My/Lisp/Comp'
+let g:netrw_dirhist_7='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/bkb.dev-data_inode.pub/benkb.repo/sxperl/My/Lisp/Interp'
+let g:netrw_dirhist_8='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/bkb.dev-data_inode.pub/benkb.repo/sxperl/My/Lisp/Comp'

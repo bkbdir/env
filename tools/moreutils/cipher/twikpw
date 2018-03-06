@@ -1,0 +1,197 @@
+#!/usr/bin/perl
+#
+# usage:  perl twikpw profile bkb 1
+#
+# browse profiles: perl twikpw 
+# browse logins : perl twikpw myprofile <regex>
+# browse logins : perl twikpw myprofile <regex>
+# get specific login: perl twikpw myprole <regex> 2
+#
+use strict;
+use warnings;
+use Data::Dumper;
+
+
+my $passx = qx(which pass);
+chomp $passx;
+
+my $twikconf = $ENV{HOME} . "/.twik.conf";
+
+my ($Profile, $Login, $Printpw, $Index) = @ARGV;
+
+die "Err: no twik.conf" unless ( -f $twikconf ) ;
+
+open (my $fh, '<', $twikconf) || die "Err: cannot opn twikconf in $twikconf";
+
+my $Rx_profile = qr(^\[(.*)\]\s*$);
+
+sub print_profiles {
+   while(<$fh>){
+      chomp;
+
+      if(/$Rx_profile/){
+         print  $1 . "\n";
+      }
+      
+   }
+}
+
+#password_type = 1
+#resilio = bkb-gremlins_password_type = 1
+my $Rx_login = qr[^(.*)_chars = \d+$];
+
+sub print_logins {
+
+   my $inprofile = undef;
+
+   while(<$fh>){
+      chomp;
+      if(/$Rx_profile/){
+         if($1 eq $Profile){
+            die "Err: there are more than one of the same profile in ~/.twik.conf" if $inprofile;
+            $inprofile = 1;
+         }else{
+            undef $inprofile
+         }
+      }elsif(/$Rx_login/){
+         if($inprofile){
+            print $1 . "\n";
+         }else{
+         }
+      }
+   }
+}
+
+sub neardown_login {
+
+   my $inprofile = undef;
+
+   my @logins = (0); 
+
+   while(<$fh>){
+      chomp;
+      if(/$Rx_profile/){
+         if($1 eq $Profile){
+            die "Err: there are more than one of the same profile in ~/.twik.conf" if $inprofile;
+            $inprofile = 1;
+         }else{
+            undef $inprofile
+         }
+      }elsif(/$Rx_login/){
+         my $match = $1;
+         if($inprofile){
+            if($match eq $Login){
+               undef @logins;
+               @logins = ( 0, $match);
+               last;
+            }elsif($match =~ /$Login/){
+               push @logins, $match;
+            }
+         }
+      }
+   }
+   return @logins;
+
+}
+
+sub get_twikpw {
+
+   my ($twikpw) = qx($passx twik/$Profile);
+   chomp $twikpw if $twikpw;
+   return $twikpw;
+}
+
+sub get_password {
+   my ($login) = @_;
+
+      my $twikpw;
+      if($passx){
+         if (-f $passx ){ 
+            $twikpw = get_twikpw();
+         }
+      }
+
+      print 'Get pw from twik: ' . $login . "\n" unless $Printpw;
+      my $pw;
+      if($twikpw){
+         ($pw) = qx(/usr/local/bin/twik -p "$Profile" -m "$twikpw" "$login");
+      }else{
+         ($pw) = qx(/usr/local/bin/twik -p "$Profile" "$login");
+      }
+      return $pw;
+
+}
+
+sub copypw {
+   my ($cmd, $pw) =  @_;
+   my $r = open my $exe, $cmd or die "Couldn't run `$cmd`: $!\n";
+   print $exe  $pw;
+   close $exe or die "Error closing `$cmd`: $!";
+}
+sub password_to_clipboard {
+   my ($pw) = @_;
+
+   print 'copied into clipboard ...' unless $Printpw;
+   my ($os) = qx(uname);
+   chomp $os;
+   if(lc($os) eq 'linux'){
+      my $cmd = '| DISPLAY=:0 xclip -sel clip ';
+      copypw($cmd, $pw);
+   }elsif(lc($os) eq 'darwin'){
+      my $cmd = '|pbcopy';
+      copypw($cmd, $pw);
+   }else{
+      die "Err: clipboard not implemented for $os";
+   }
+}
+
+sub result_pw {
+   my ($login) = @_;
+   my $pw = get_password ($login);
+
+      if($Printpw){
+         print $pw;
+      }else{
+         password_to_clipboard ($pw);
+      }
+}
+sub try_to_make_new_password{
+      print "Warn: Sorry, couldnt find any logins for $Login, try to make a new twik pw\n";
+   result_pw($Login);
+   }
+
+if($Index){
+   my @logins = neardown_login();
+   my $login = $logins[$Index];
+   die "Err: couldn't find this index $Index" unless $login;
+   result_pw($login);
+}elsif($Login){
+   my @logins = neardown_login();
+   if(@logins == 2 ){
+      my $login_found = $logins[1];
+      if($login_found eq $Login){ 
+         result_pw($login_found);
+       }else{
+         print "Warn: login found ($login_found) is not matching ";
+         try_to_make_new_password();
+       }
+   }elsif(@logins == 1 ){
+      try_to_make_new_password();
+   }else{
+      my $i = 1;
+      map { print  $i++ . ') ' . $_ . "\n" } @logins
+   }
+}elsif($Profile){
+   print_logins();
+}else{
+   print_profiles();
+}
+
+
+
+#[bkb_H3b0]
+#private_key = 62S39Y2H-AMPH-YT11-HMLR-8C5I46IGEF1X
+#chars = 12
+#password_type = 1
+#resilio = bkb-gremlins_password_type = 1
+

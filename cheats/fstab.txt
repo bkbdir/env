@@ -1,0 +1,7 @@
+Fstab / Samba
+------------
+
+remount fstab without logout: 
+
+   sudo mount -a
+

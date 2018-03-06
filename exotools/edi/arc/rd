@@ -1,0 +1,15 @@
+#!/bin/sh
+
+args=
+for f in "$@" ; do
+        args="$args $f"
+done
+case $args in
+    q)
+        tmux send-keys -t rd "q"
+        ;;
+    *)
+        tmux send-keys -t rd "$args" C-m
+        ;;
+esac
+

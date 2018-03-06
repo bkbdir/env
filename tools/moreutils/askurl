@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+#
+#
+#
+qx(elinks -remote "openUrl($ARGV[0])");
+
+my @lns = qx(elinks -dump $ARGV[0]);
+
+my $kip;
+my %res;
+
+foreach (@lns){
+    if($kip){
+        if(/\s+(\d+)\.\s+(.*)/){
+            $res{$1} = $2;
+        }else {
+            die "Err: couldnot parse data" . $_;
+        }
+    }
+    if (/\s*Visible links\s*$/){
+        $kip = 1;
+    }
+}
+
+print "Link number please: \n";
+my $input = <STDIN>;
+chomp $input;
+
+die "bye" unless $input;
+
+my $link = $res{$input};
+#use Data::Dumper;
+
+die "Err: invalid input - no link found " unless $link;
+
+# recursive ...
+exec("$ENV{HOME}/tools/utils/askurl $link");
+
+ 

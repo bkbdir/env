@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Create a dated tar file from a dir
+
+
+USAGE='<dir>'
+
+dir=$1
+
+[ -d "$dir" ] || { echo "usage: $USAGE" ; exit 1; }
+
+today=$(date "+%F")
+
+datedir="${dir}_$today"
+datetar="${dir}_$today".tar.gz
+
+[ -d "$datedir" ] && { echo "Err: datedir $datedir already exists" ; exit 1; }
+[ -f "$datetar" ] && { echo "Err: datetar $datetar already exists" ; exit 1; }
+
+cp -r "$dir" "$datedir"
+
+[ "$?" -eq 0 ] || { echo "Err: copy command had errors. Exit."; exit 1; }
+
+tar cfvz "${datetar}" "$datedir"
+
+rm -rf "$datedir"
+
+

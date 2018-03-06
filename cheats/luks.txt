@@ -1,0 +1,18 @@
+## Luks
+
+sudo cryptsetup luksClose /dev/mapper/locsecvault
+sudo umount /media/localvault
+
+### Setup a luks based container
+
+    dd if=/dev/urandom of=(pwd)/localvault_mallrats.luks  bs=1M count=1000
+    sudo cryptsetup -y luksFormat ./localvault_mallrats.luks
+    sudo cryptsetup luksOpen ./localvault_mallrats.luks  localvault
+    sudo mkfs.ext4 -j /dev/mapper/localvault
+    sudo mkdir /media/localvault
+    sudo mount /dev/mapper/localvault  /media/localvault
+
+And the unmount process
+
+    sudo cryptsetup luksClose /dev/mapper/localvault
+    sudo umount /dev/mapper/localvault

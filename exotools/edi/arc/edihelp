@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+
+
+#$docs=$ENV{DOCHOME};
+$docs="$ENV{HOME}/io/textdocs/";
+$sentaku="$ENV{HOME}/edi/bin/sentaku";
+
+-d "$docs" || die 'Err: no docs in $DOCHOME:' . $ENV{DOCHOME};
+-f $sentaku || die "Err: sentaku is not installed in $sentaku";
+
+
+$word=$ARGV[0];
+
+chomp $word;
+
+die "Err: no word given" unless $word;
+
+$doc=qx(find -L $docs -type f | grep $word | $sentaku 2>&1 );
+die "Err: $!" if $?;
+
+chomp $doc;
+
+die "Err: no doc found" unless $doc;
+
+qx(elinks --remote "openURL(file:///$doc)" );
+
+

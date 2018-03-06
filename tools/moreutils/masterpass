@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+#
+use Digest::SHA qw(sha256_base64);
+
+use Term::ReadKey;
+
+print "coord 1\n";
+ReadMode('noecho'); 
+chomp(my $coord1 = <STDIN>);
+
+print "coord 2\n";
+ReadMode('noecho'); 
+chomp(my $coord2 = <STDIN>);
+
+print "coord 3\n";
+ReadMode('noecho'); 
+chomp(my $coord3 = <STDIN>);
+ReadMode(0);        # back to normal
+
+print "ok ... \n";
+
+($n, $d) = split /\:/, $coord2;
+
+$nn = $n;
+$nn--;
+
+# $hash = sha256_base64("$coord1#$n:$d#$coord3");
+
+
+# only in the private version
+#$ctrl = q(52b2g+kwfxzVVoO9JXxVDAcuQLMlkTQzYlwvKAjOZIU);
+#die "Err: wrong pw for " unless $hash eq $ctrl;
+
+
+my ($res) =  qx(~/tools/sw/bin/passtab -i ~/.passtab_db -g '$coord1' -s '$nn:$d' --collision '$coord3' );
+
+chomp $res;
+
+system(" echo -n '$res' | xclip -sel clip ");
+print @fin;
+
+

@@ -1,0 +1,22 @@
+#! /bin/sh
+
+sxhkd &
+
+echo keycode 24 = q Q at at at at | xmodmap -
+
+bspc config border_width        2
+bspc config window_gap         2
+
+bspc config split_ratio         0.52
+bspc config borderless_monocle  true
+bspc config gapless_monocle     true
+bspc config focus_by_distance   true
+
+bspc monitor -d I II III IV V VI VII VIII IX X
+
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+bspc rule -a URxvt:Webpad sticky=on state=floating 
+bspc rule -a URxvt:Scratchpad sticky=on state=floating 
+bspc rule -a URxvt:Fred sticky=on state=floating 
+bspc rule -a URxvt:Prompt sticky=on state=floating 

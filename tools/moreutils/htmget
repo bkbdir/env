@@ -1,0 +1,60 @@
+#!/bin/sh
+
+
+cwd=$1
+shift
+url=$1
+shift
+title=$1
+shift
+
+
+urlenc () { #url encode the passed string
+  echo -n "$1" | perl -pe's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg'
+}
+
+fymd () {
+    encurl=$(urlenc $url)
+
+
+    subject=$1
+
+    [ "$subject" = ""  ] && { echo "Err: no tags given"; exit 1 ; }
+
+    title=$(perl -e '$ln = $ARGV[0]; $ln =~ s/^\s*//g; $ln =~ s/^\s*//g; $ln =~ s/[^a-zA-Z\d]+/_/g;print $ln;'  "$title"); 
+    [ "$title" = "" ] && { echo "Err: no title" ; exit 1; }
+ 
+     mkdir -p "$cwd/$subject/files"
+
+ [ -f "$cwd/$subject/$title.html" ] && { echo "Err: title $title already exists"; exit 1;  }
+ [ -f "$cwd/$subject/$title.meta" ] && { echo "Err: title $title already exists"; exit 1;  }
+
+
+  [ -f "$cwd/firefoxout.html" ] || { sleep 1 ; }  
+  [ -f "$cwd/firefoxout.html" ] || { sleep 1 ; }  
+  [ -f "$cwd/firefoxout.html" ] || { sleep 1 ; }  
+  [ -f "$cwd/firefoxout.html" ] || { sleep 1 ; }  
+  [ -f "$cwd/firefoxout.html" ] || { sleep 1 ; }  
+
+  [ -f "$cwd/firefoxout.html" ] || { echo "Err: no firefoxoutfile in $cwd/firefoxout.html" ; exit 1 ; }
+
+  {
+  echo "    tags: $subject $@ "
+  echo ""
+  echo "    source: $url "
+  echo ""
+  echo "Downloaded on " $(date)
+  }  > $cwd/$subject/$title.meta
+
+
+
+  perl -p -e "s/firefoxout_files/files\/${title}_files/g" $cwd/firefoxout.html > $cwd/$subject/$title.html 
+
+  mv $cwd/firefoxout_files   $cwd/$subject/files/${title}_files
+
+  rm -rf $cwd/firefoxout*
+
+  echo "mdget: saved in $cwd/$subject/$title.html"
+}
+
+fymd $@ 

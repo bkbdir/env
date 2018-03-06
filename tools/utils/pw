@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+
+# create and fetch passwords
+#
+
+our $User = $ARGV[0];
+our $Token = $ARGV[1];
+
+our $Getpw_x = "$ENV{HOME}/tools/moreutils/bin/twikpw";
+die "Err: not getpw under $Getpw_x" unless -f $Getpw_x;
+
+chomp $User; chomp $Token;
+die "usage: pw user token" unless $User;
+die "usage: pw user token" unless $Token;
+
+
+my $pass = $Token;
+$pass =~ s/[^\w]/_/g;
+
+my $userpass = "$User/$pass";
+
+my $path =  "$ENV{HOME}/.password-store/twik/$userpass";
+
+
+if (-f "$path.gpg"){
+   print "User/Token: $User/$Token, \n";
+   system qq(pass  --clip 'twik/$userpass')
+}else{
+   print "User/Token: $User/$Token, (userpass: $userpass) \n";
+   system qq($Getpw_x '$User' '$Token');
+   print "\n!! The pw is in the clipboard\n\n"; 
+   system qq(pass insert 'twik/$userpass');
+   system qq(echo '$Token' > $path.token);
+}
+
+
+__END__
+user=$1
+token=$2
+
+[ -n "$token" ] || { echo "usage(pw): user token"; exit 1; }
+
+pws=$HOME/.password-store
+
+echo "try to fech $pws/$user/$token"
+
+if [ -f "$pws/$user/$token" ] ; then
+   echo "Fetch pw ($user $token) from password-store"
+   pass "$user/$token"
+else
+   echo "Create pw ($user $token) from twik"
+   $HOME/tools/moreutils/bin/getpw "$user" "$token"
+fi

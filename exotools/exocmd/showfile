@@ -1,0 +1,21 @@
+#!/bin/sh
+
+
+file=$1
+[ -f "$file" ] || { echo "Err: file $file not exists" ; exit 1 ; }
+
+realpath=$HOME/tools/utils/realpath
+[ -f "$realpath" ] || { echo "Err: cmd $realpath not exists" ; exit 1 ; }
+
+realfile=$($realpath $file)
+
+tmux send-keys -t show "clear; and cat $realfile" Enter
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,9 @@
+Ocaml
+-----
+
+### Compilation
+
+Compile with scheme syntax
+
+      ocamlc -c -pp "camlp5r pa_scheme.cmo pr_o.cmo" hello.ml
+

@@ -1,0 +1,49 @@
+#!/bin/sh
+
+
+cwd=$1
+shift
+url=$1
+shift
+title=$1
+shift
+
+
+urlenc () { #url encode the passed string
+  echo -n "$1" | perl -pe's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg'
+}
+
+fymd () {
+    encurl=$(urlenc $url)
+
+
+    subject=$1
+
+    [ "$subject" = ""  ] && { echo "Err: no tags given"; exit 1 ; }
+
+    filetitle=$(perl -e '$ln = $ARGV[0]; $ln =~ s/^\s*//g; $ln =~ s/^\s*//g; $ln =~ s/[^a-zA-Z\d]+/_/g;print $ln;'  "$title"); 
+    [ "$filetitle" = "" ] && { echo "Err: no title" ; exit 1; }
+ 
+     mkdir -p "$cwd/$subject"
+
+ [ -f "$cwd/$subject/$filetitle.md" ] && { echo "Err: title $filetitle already exists"; exit 1;  }
+
+  {
+  echo "    tags: $subject $@ "
+  echo ""
+  echo "    source: $url "
+  echo ""
+  }  > $cwd/$subject/$filetitle.md
+
+ curl --silent "$url" | pandoc -f html -t markdown >> "$cwd/$subject/$filetitle.md"
+
+ {
+  echo ""
+  echo "-------"
+  echo "Downloaded on " $(date)
+  } >> $cwd/$subject/$filetitle.md
+
+  echo "mdget: saved in $cwd/$subject/$filetitle.md"
+}
+
+fymd $@ 

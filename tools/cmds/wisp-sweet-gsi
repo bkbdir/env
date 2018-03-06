@@ -1,0 +1,15 @@
+#!/usr/local/bin/dash
+
+
+input=$1
+shift
+
+tmp=$(mktemp )
+tmpsweet=$(mktemp )
+
+~/tools/cmds/wisp $input > $tmp
+
+~/local/bin/unsweeten $tmp > $tmpsweet
+
+gsi $tmpsweet
+

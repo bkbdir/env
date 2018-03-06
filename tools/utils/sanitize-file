@@ -1,0 +1,30 @@
+#!/bin/sh
+
+inp=$1
+shift
+
+[ -f "$inp" ] || { echo "Err: invalid path under $inp"; exit 1; }
+
+dname=$(dirname "$inp")
+bname=$(basename "$inp")
+name="${bname%.*}"
+ext="${bname##*.}"
+
+oname=
+if [ -n "$1" ] ; then
+   # sanitaize input title to filename
+   oname=$(perl -e '$str=join "-", map { s/[^a-zA-Z0-9]+/_/g; lc $_ ; } @ARGV ; print $str ; ' "$name")
+else
+   oname=$(perl -e '$str=join "-", map { s/[^a-zA-Z0-9]+/_/g; lc $_ ; } @ARGV ; print $str ; ' "$name")
+fi
+
+if [ "$name" = "$ext" ] ; then # no file extension
+   outp=$dname/$oname
+else
+   outp=$dname/$oname.$ext
+fi
+
+   echo mv: $inp $outp
+   mv "$inp" $outp
+
+

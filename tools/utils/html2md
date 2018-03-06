@@ -1,0 +1,35 @@
+#!/bin/sh
+
+
+inp=$1
+shift
+
+# title = $@
+
+
+outp=
+if [ -n "$1" ] ; then
+   # sanitaize input title to filename
+   outp=$(perl -e '$str=join "-", map { s/[^a-zA-Z0-9]+/_/g; lc $_ ; } @ARGV ; print $str ; ' $@)
+else
+   outp=${inp%.*}
+fi
+
+outf=
+if [ -n "$outp" ] ; then
+   outf=$outp.md
+else
+   echo "Err: no filename could be generated"
+   exit 1
+fi
+
+
+[ -f "$inp" ] || { echo "usage: html file" ; exit 1 ; }
+
+if which pandoc > /dev/null ; then
+   pandoc --standalone --from html --to markdown $inp | perl -ne 'print $_ unless (/^\s*\<div/ or /^\s*\<\/div/)' | tee $outf
+else
+   echo "Err: no 'pandoc' installed" 
+   exit 1
+fi
+

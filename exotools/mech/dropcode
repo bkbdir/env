@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#hname=$(hostname)
+
+sess=$(tmux has-session -t 'dropterm')
+
+if [ "$?" eq 0 ] ;then
+
+   echo kk
+else
+   tmux new -s 'dropterm'
+fi
+
+echo  $?

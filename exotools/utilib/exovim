@@ -1,0 +1,43 @@
+#!/bin/sh
+
+instancename=$1
+file=$2
+
+NAME=$(perl -e 'print uc $ARGV[0]; ' $instancename)
+
+os=$(uname)
+
+takevim () {
+   if pgrep gvim ; then
+      gvim --remote $@
+   else
+      if which gvim > /dev/null; then
+         gvim --servername $NAME $@
+
+      elif which nvim > /dev/null ; then
+         #NVIM_LISTEN_ADDRESS=/tmp/nvimsocket nvim $@
+         if [ -e /tmp/nvimsocket ] ; then
+            nvr --remote $@
+         else
+            NVIM_LISTEN_ADDRESS=/tmp/nvimsocket nvim $@
+         fi
+      else
+         vim $@
+      fi
+   fi
+}
+
+case "$os" in 
+   Darwin)
+      if mvim --serverlist | grep $NAME > /dev/null ; then
+         mvim --servername $NAME --remote $file > /dev/null
+      elif which mvim > /dev/null ; then
+         mvim --servername $NAME $file > /dev/null
+      else
+         takevim
+      fi
+      ;;
+   *)
+         takevim
+      ;;
+esac

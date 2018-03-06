@@ -1,0 +1,81 @@
+! Xdefaults with urxvt settings for macosx
+
+! had some problems with fonts (antialiasing), these did work:
+! URxvt.font:     xft:bitstream vera sans mono:size=16:antialias=true
+! URxvt.boldFont: xft:bitstream vera sans mono:bold:size=16:antialias=true
+
+
+
+! taken from: https://raw.githubusercontent.com/tsukkee/config/master/Xdefaults
+URxvt.termName: rxvt-256color
+URxvt.foreground: White
+URxvt.background: Gray10
+URxvt.geometry: 130x45
+URxvt.scrollBar: false
+URxvt.saveLines: 1000
+
+! Menlo
+!URxvt.font:\
+!    xft:Menlo:style=Regular:size=11:antialias=true,\
+!    xft:Osaka:style=Regular-Mono
+!URxvt.boldFont:\
+!    xft:Menlo:style=Bold,\
+!    xft:Osaka:style=Regular-Mono
+!URxvt.italicFont:\
+!    xft:Menlo:style=Italic,\
+!    xft:Osaka:style=Regular-Mono
+!URxvt.boldItalicFont:\
+!    xft:Menlo:style=Bold Italic,\
+!    xft:Osaka:style=Regular-Mono
+
+! Inconsolata
+URxvt.font:\
+    xft:Inconsolata:style=Medium:size=15:antialias=true,\
+    xft:Osaka:style=Regular-Mono
+URxvt.boldFont:\
+    xft:Inconsolata,\
+    xft:Osaka:style=Regular-Mono
+URxvt.italicFont:\
+    xft:Inconsolata,\
+    xft:Osaka:style=Regular-Mono
+URxvt.boldItalicFont:\
+    xft:Inconsolata,\
+    xft:Osaka:style=Regular-Mono
+
+! Bitstream Vera Sans Mono
+!URxvt.font:\
+!    xft:Bitstream Vera Sans Mono:style=Roman:size=11:antialias=true,\
+!    xft:Osaka:style=Regular-Mono
+!URxvt.boldFont:\
+!    xft:Bitstream Vera Sans Mono:style=Bold,\
+!    xft:Osaka:style=Regular-Mono
+!URxvt.italicFont:\
+!    xft:Bitstream Vera Sans Mono:style=Oblique,\
+!    xft:Osaka:style=Regular-Mono
+!URxvt.boldItalicFont:\
+!    xft:Bitstream Vera Sans Mono:style=Bold Oblique,\
+!    xft:Osaka:style=Regular-Mono
+
+URxvt.perl-ext-common: default,macosx-clipboard-pbcopy
+URxvt.keysym.M-c: perl:macosx-clipboard:copy
+URxvt.keysym.M-v: perl:macosx-clipboard:paste
+
+! C-, -> F9
+URxvt.keysym.C-0x2e: \033[20~
+! C-, -> F10
+URxvt.keysym.C-0x2c: \033[21~
+
+URxvt.color4: #a9cdeb
+URxvt.color12: #ccfbff
+
+XTerm*termName: xterm-256color
+XTerm*utf8: 1
+XTerm*metaSendsEscape: true
+XTerm*foreground: White
+XTerm*background: Gray10
+XTerm*geometry: 120x38
+XTerm*saveLines: 1000
+XTerm*faceName: Menlo
+XTerm*faceNameDoublesize: Osaka
+XTerm*faceSize: 11
+XTerm*cjkWidth: true

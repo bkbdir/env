@@ -1,0 +1,24 @@
+#!/bin/sh
+
+
+string=
+
+while read ln; do
+   string="${string} $ln"
+done
+
+
+os=$(uname)
+
+case "$os" in
+   Darwin)
+      printf  "$string" | pbcopy
+      ;;
+   Linux)
+      printf $ln | xclip -sel clip
+      ;;
+   *)
+      echo "Err: os $os not implemnted"
+      exit 1
+      ;;
+esac

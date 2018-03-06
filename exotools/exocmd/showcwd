@@ -1,0 +1,14 @@
+#!/bin/sh
+
+cwd=$(pwd)
+
+tmux send-keys -t show "clear; and cd $cwd; and pwd" Enter
+
+
+
+
+
+
+
+
+

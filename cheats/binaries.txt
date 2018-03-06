@@ -1,0 +1,11 @@
+Binaries
+--------
+
+### Show dependencies of a binary
+
+Linux:
+   ldd <binary>
+Osx:
+   otool -L <binary>
+
+(or use my util 'show-deps')

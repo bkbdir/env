@@ -1,0 +1,15 @@
+#!/bin/sh
+
+
+cmd=$1
+
+
+case $cmd in
+    set)
+        [ -d $HOME/var/edi ] || mkdir -p $HOME/var/edi
+        tmux display-message -p '#W' > $HOME/var/edi/ctx
+        ;;
+        *)
+        exit
+        ;;
+esac

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+
+
+target_session=$1
+shift
+
+cmd="$@"
+
+
+if tmux has-session -t $target_session ; then
+   tmux send-keys -t $target_session "$cmd" Enter
+fi

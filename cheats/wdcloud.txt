@@ -1,0 +1,7 @@
+WD Cloud
+-------
+
+
+restart sshd:
+
+   pkill -HUP sshd

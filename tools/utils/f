@@ -1,0 +1,16 @@
+#!/bin/sh
+
+
+listcmd=$1
+rescmd=$2
+shift
+shift
+
+echo $listcmd
+exit
+
+res=$($listcmd | fzf)
+
+${rescmd} $res $@
+
+

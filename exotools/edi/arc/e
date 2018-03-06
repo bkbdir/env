@@ -1,0 +1,24 @@
+#!/bin/sh
+
+#ctx=$(cat $HOME/var/edi/ctx)
+
+sess=$(tmux display-message -p '#S')
+
+sessname=${sess%-*}
+
+
+#pane=$(tmux display-message -p '#P')
+
+vimserv=$(echo "${sessname}_edit" | tr '[:lower:]' '[:upper:]')
+
+
+if [ -n "$vimserv" ] ; then
+    vim --servername $vimserv --remote $1
+    tmux swap-pane -D
+    tmux select-pane -D
+else
+    vim $1
+fi
+
+
+

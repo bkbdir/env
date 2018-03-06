@@ -1,0 +1,2 @@
+F8
+   sh ~/dev/test.sh > ~/dev/test.log

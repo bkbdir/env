@@ -1,0 +1,29 @@
+#!/bin/sh
+
+
+os=$(uname -s)
+
+chrome=
+case $os in
+   Linux)
+      chrome='chromium-browser' ;;
+   *)
+      chrome='chrome';;
+esac
+
+[ "$1" = '-h' ] && { echo "usage: remote-chrome <profile> <port> " ; exit 1; }
+
+port=
+if [ -z "$2"  ]; then
+   port=9222
+else
+   port="$2"
+fi
+
+
+if [ -n "$1" ] ; then
+   "${chrome}" --remote-debugging-port=$port --user-data-dir="$1"
+else
+   "${chrome}" --remote-debugging-port=$port
+fi
+

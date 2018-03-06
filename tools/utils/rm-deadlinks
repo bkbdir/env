@@ -1,0 +1,10 @@
+#!/bin/sh
+
+
+if [ -n "$1" ] ; then
+#   echo    find  -L "$1" -maxdepth 1  -type l -exec rm -f {} \;
+   find  -L "$1" -maxdepth 1  -type l -exec rm -f {} \;
+else
+   find  -L . -maxdepth 1  -type l -exec rm -f {} \;
+fi
+

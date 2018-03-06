@@ -1,0 +1,49 @@
+#!/bin/sh
+
+
+
+file=$1
+[ "$#" -ne "1" ] && { echo "Usage: untar <file>"; exit 1; }
+
+#[ -f "$1" ] || { echo "Err: arg is not a valid file " ; exit 1; }
+
+bfile=$(basename "$1")
+
+name=${bfile%.*}
+ext=${bfile##*.}
+subext=${name##*.}
+
+if [ "$subext" = "tar" ]; then
+   case "$ext" in
+      bz2)
+         tar xvfj "$file"
+      ;;
+      xz)
+         tar xvfJ "$file"
+      ;;
+      gz)
+         tar xvfz "$file"
+      ;;
+      *)
+         echo "Err: $subext extension unknown"
+         exit 1;
+      ;;
+   esac
+else
+   case "$ext" in
+      zip)
+         unzip "$file"
+         ;;
+      tgz)
+         tar zxf "$file"
+         ;;
+      gz)
+         gunzip "$file"
+         ;;
+      *)
+         echo "Err: $ext extension unknown"
+         exit 1;
+         ;;
+   esac
+fi
+

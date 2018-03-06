@@ -1,0 +1,12 @@
+#!/usr/local/bin/dash
+
+
+input=$1
+shift
+
+tmp=$(mktemp )
+
+~/tools/cmds/wisp $input > $tmp
+
+gsi $tmp
+

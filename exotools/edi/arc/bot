@@ -1,0 +1,12 @@
+#!/bin/sh
+
+
+cmd=$HOME/bot/cmds/"b"$1.pl
+shift
+
+[ -f "$cmd" ] || { echo "Err: cmd $1 not exist" ; exit 1 ; }
+
+${cmd} "$@"
+
+
+exit

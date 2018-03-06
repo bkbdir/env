@@ -1,0 +1,78 @@
+#!/bin/bash
+
+POPUP="rofi -dmenu"
+TERMCMD=urxvtcd
+
+TWIK_SCRIPT=~/aux/secutils/twik_password_app.bash
+
+function menu_tmux  {
+   echo "Tmux: w: list of windows"
+   read -sn 1 answer2
+   case "$answer2" in
+      w)
+         echo "Tmux -> List of windows current sessions"
+         currsess=$(tmux display-message -p "#S")
+         win=$(tmux list-windows -t $currsess | ${POPUP} | perl -ne '/^(\d*):.*/ && print $1')
+         tmux select-window -t $cursess:$win
+         ;;
+      *)
+         echo "hello"
+         sleep 2
+         ;;
+   esac
+}
+function menu_password  {
+
+
+   [ -f "$TWIK_SCRIPT" ] || { 
+      echo "Err: no pw script $TWIK_SCRIPT" ; 
+      sleep 2;
+      exit 1 ; 
+   }
+   local args="bash ~/aux/secutils/twik_password_app.bash ~/aux/secutils/twik_password_app.bash"
+
+   echo "Password: which user [b]en, [j]akobs, [a]dmins?"
+   read -sn 1 user
+   case "$user" in
+      b)
+         ${TERMCMD} -e bash $TWIK_SCRIPT $TWIK_SCRIPT ben
+         ;;
+      a)
+         ${TERMCMD} -e bash $TWIK_SCRIPT $TWIK_SCRIPT Admins
+         ;;
+      *)
+         echo "hello"
+         sleep 2
+         ;;
+   esac
+}
+
+# -----------------------------------
+
+echo "   MENU   "
+echo ""
+echo "t:tmux | p:password | q:quit"
+read -sn 1 answer1
+case "$answer1" in
+   t) menu_tmux ;;
+   p) 
+      menu_password
+         ;;
+   q)
+      echo ""
+      echo "I'm gonna quit, in one, ..."
+      sleep 0.7
+      echo "two"
+      sleep 0.5
+      echo "three"
+      sleep 0.3
+      exit 1
+      ;;
+   *)
+      echo "suck ya"
+      ;;
+esac
+
+
+#s
+#tmux display-message -p '#S'leep 1

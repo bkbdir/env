@@ -1,0 +1,5 @@
+#!/bin/sh
+
+
+
+find -L ~/ide/Docu/* -iname "*$1*" 

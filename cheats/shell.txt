@@ -1,0 +1,6 @@
+# Shell scripting
+
+## read silent
+
+echo "pw:"
+read -s pw

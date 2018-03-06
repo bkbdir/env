@@ -1,0 +1,81 @@
+#!/bin/bash
+
+
+sess=$(tmux display-message -p '#S')
+win=$(tmux display-message -p '#W')
+
+
+sendtopane (){
+    pane=$(tmux display-message -p '#P')
+     case $pane in
+         0)
+            tmux send-key -t .1 "$1" C-m
+             ;;
+         1)
+            tmux send-key -t .0 "$1" C-m
+            ;;
+         *)
+             echo "Err: pane number invalid $pane"
+            exit 1;
+             ;;
+     esac
+}
+
+# ctx=${win%-*}
+# outsess=${ctx}-out
+
+checksession () {
+    tmux list-sessions | grep $1 > /dev/null || {
+        echo "Err: session $1 not existing"
+        exit 1
+    }
+}
+
+if [ -f 'vitmux.conf' ] ; then
+    cat vitmux.conf | while read ln ; do
+    case $ln in
+        \#*)
+            continue
+            ;;
+        *)
+            target=${ln%|*}
+            cmd=${ln##*|}
+            targetsess=${target%:*}
+            targetrest=${target##*:}
+            targetwin=${targetrest%.*}
+            if [ "$sess" = "$targetsess" ] ;then
+                if [ "$win" = "$targetwin" ] ;then
+                    sendtopane "$cmd"
+                else
+                    checksession $targetsess
+                    tmux send-key -t $target "$cmd" C-m
+                fi
+            else
+                checksession $sess
+                tmux send-key -t $target "$cmd" C-m
+            fi
+            ;;
+    esac
+    done
+    #tmux send-keys -t "$outsess:0.0" "sh ./virun.sh" C-m
+else
+    echo "Err: no vitmux.conf file"
+    exit 1
+fi
+
+
+#tmux run -t "$sess:$win.0"  "$@" 
+#tmux send-keys -t "$sess:$win.$pane"  "$@" C-m
+
+# case $pane in
+#     0)
+#         tmux send-keys -t "$sess:$win.1" "sh ./virun.sh" C-m
+#         ;;
+#     1)
+#         tmux send-keys -t "$sess:$win.0" "sh ./virun.sh" C-m
+#         ;;
+#     *)
+#         echo "Err: pane number invalid $pane"
+#         exit 1;
+#         ;;
+# esac

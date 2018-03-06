@@ -1,0 +1,7 @@
+#!/bin/sh
+
+inp=$1
+
+[ -d "$inp" ] || { echo "usage: dir" ; exit 1; }
+
+tar cfz  $inp.tar.gz $inp

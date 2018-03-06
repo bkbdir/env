@@ -1,0 +1,17 @@
+Tar
+---
+
+### untar a .zx file
+
+    tar -xJf file.pkg.tar.xz
+
+### create a tarball without the entire file tree
+
+- use "-C"
+- exclude stuff with "--exclude=.git"
+
+   tar --exclude='.git' -z -c -v -f  foo.tar.gz -C /usr/local foo 
+
+decompress a .rar file
+    
+    unrar e file.rar

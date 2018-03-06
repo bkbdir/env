@@ -1,0 +1,19 @@
+#!/bin/sh
+
+VISERV=EDITOR
+vim=vim
+
+instance=
+for v in $(vim --serverlist) ; do
+
+   [ "$v" = "$VISERV" ] && instance=1
+done
+
+
+if [ -n "$instance" ] ; then 
+   $vim --servername $VISERV --remote $@
+else
+    echo "Err: no vim server $VISERV"
+    exit 1
+ fi
+   

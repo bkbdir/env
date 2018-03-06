@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+#
+in=$1
+n=${in%.*}
+out=$n.scm
+
+camlp5=/Users/bkb/.opam//4.02.3+buckle-master/bin/camlp5
+
+[ -f "$camlp5" ] || {
+   camlp5=$(which camlp5)
+}
+[ -f "$camlp5" ] || {
+   echo "Err: couldnt find camlp5"
+   exit 1
+}
+
+outf=
+if [ -f "$out" ] ; then
+   outf=${n}-gen.scm
+else
+   outf=$out
+fi
+
+tmp=$(mktemp)
+${camlp5} pa_o.cmo pr_scheme.cmo -impl $in > $tmp 
+
+if [ "$?" = "0" ] ; then
+  cat $tmp | tee $outf
+fi

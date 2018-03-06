@@ -1,0 +1,5 @@
+#!/usr/bin/osascript
+#
+tell application "Safari"
+	close current tab of front window without saving
+end tell

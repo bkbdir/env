@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+
+if tmux has-session -t dropterm; then  
+   tmux attach -t dropterm 
+else
+   tmux new  -s dropterm
+fi

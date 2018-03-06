@@ -1,0 +1,24 @@
+# ~/.profile: 
+# ------------
+#
+# - set environment variables (except bash specific ones)
+# - executed by the command interpreters for login shells. Must be compatible with /bin/sh (bash,dash,ksh)
+# ~/.profile is loaded by .bash_profile in bash
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+# set PATH so it includes user's private bin directories
+PATH="$HOME/bin:$HOME/.local/bin:$HOME/local/bin:$PATH"
+TOOLS=$HOME/.tools
+for d in  $HOME/go/bin $TOOLS/utils $TOOLS/moreutils/bin ; do
+   [ -e "$d" ] && {
+      PATH="$PATH:$d"
+   }
+done
+export PATH
+# OPAM configuration
+. /Users/bkb/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true

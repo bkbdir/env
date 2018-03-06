@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew E. Bruno is a software developer and GNU/Linux enthusiast. His interests include web development, high performance computing, and data visualization.">
+    <meta name="author" content="Andrew E. Bruno">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="" rel="alternate" type="application/rss+xml" title="">
+    <title>  passtab - store passwords in your wallet &middot;  qnot.org</title>
+    <link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://qnot.org/css/syntax.css">
+    <link rel="stylesheet" href="http://qnot.org/css/styles.css">
+
+    
+    
+  </head>
+
+<body>
+
+<div class="container">
+<ol class="breadcrumb">
+    <li><a href="/">About</a></li>
+    <li><a href="/blog/">Syncopated Pandemonium</a></li>
+    <li><a href="/publications/">Publications</a></li>
+    <li><a href="https://github.com/aebruno">Code</a></li>
+    <li><a href="/contact/">Contact</a></li>
+</ol>
+
+
+<div class="post">
+  <h1>passtab - store passwords in your wallet</h1>
+  <div class="post-date">Fri, Jul 1, 2011</div>
+      <p>Here&rsquo;s a quote from <a href="http://www.schneier.com/blog/archives/2005/06/write_down_your.html">Bruce
+Schneier</a>
+that essentially sums up the motivation for this post:</p>
+
+<blockquote>
+<p>We&rsquo;re all good at securing small pieces of paper. I recommend that people write
+their passwords down on a small piece of paper, and keep it with their other
+valuable small pieces of paper: in their wallet.</p>
+</blockquote>
+
+<p>I recently read an excellent <a href="http://blog.jgc.org/2010/12/write-your-passwords-down.html">blog
+post</a> by John
+Graham-Cumming in which he presents a elegant system for writing down your
+passwords using a <a href="http://en.wikipedia.org/wiki/Tabula_recta">Tabula Recta</a>. I
+was inspired by this concept so I created a tool called
+<a href="https://github.com/aebruno/passtab">passtab</a> which aims to provide a
+light-weight system for managing passwords based on his idea. This post is
+about the general usage of passtab and presents some of the password management
+capabilities. This is not your grandmothers password manager so if you&rsquo;re
+looking for a nice GUI point and click application that&rsquo;s easy to use you can
+stop reading right here. This is for hardcore folks who enjoy looking up their
+passwords in archaic
+<a href="https://secure.wikimedia.org/wikipedia/en/wiki/Tabula_recta">tablets</a> invented
+by ancient cryptographers with last names like
+<a href="https://secure.wikimedia.org/wikipedia/en/wiki/Johannes_Trithemius">Trithemius</a>.
+For the impatient, you can grab a copy of the latest version on
+<a href="https://github.com/aebruno/passtab/archives/master">github</a>.</p>
+
+<p><strong>Introducing passtab</strong></p>
+
+<p><a href="https://github.com/aebruno/passtab">passtab</a> is a light-weight system for
+managing passwords using a Tabula Recta. passtab has two main features: 1.
+generating random Tabula Recta&rsquo;s in PDF format for printing and storing in your
+wallet 2. fetching passwords from the Tabula Recta (password managment). These
+features are independent and you can use passtab to only generate PDFs or
+optionally make use of the password management features. One unique benefit is
+the ability to have both an electronic and paper copy of your passwords. You
+can download the binary release of passtab at github
+<a href="https://github.com/aebruno/passtab/archives/master">here</a>. Unpack the
+distribution and run <code>./bin/passtab --help</code> for a list of options. If the
+startup shell script doesn&rsquo;t work you can run <code>java -jar lib/passtab-uber.jar
+--help</code>. The following sections illustrate some use cases of passtab.</p>
+
+<p><strong>Generate a random Tabula Recta in PDF</strong></p>
+
+<p>passtab can generate random Tabula Recta&rsquo;s in PDF format.</p>
+
+<pre><code>$ ./bin/passtab --format pdf --output passtab.pdf
+Jun 12, 2011 11:16:29 AM org.qnot.passtab.PassTab generate
+INFO: Generating a random Tabula Recta (might take a while)...
+$ ls *.pdf
+passtab.pdf
+</code></pre>
+
+<p>Here&rsquo;s an <a href="/media/passtab.pdf">example PDF</a> generated from passtab. You can now
+print this PDF out and store in your wallet!</p>
+
+<p><strong>How to use the Tabula Recta</strong></p>
+
+<p>Here&rsquo;s a simple example (taken directly from the
+<a href="https://github.com/aebruno/passtab/blob/master/README">README</a>), suppose we
+have the following Tabula Recta:</p>
+
+<pre><code>     | A B C D E F G H I J K L M N 
+   --|----------------------------
+   A | _ u } I ` } R ) a &lt; L : a A 
+   B | - o ( : p # O % . _ ; ' j L 
+   C | w c ( c y 2 h y ~ N O * &gt; w 
+   D | o : R m L % V , d H r Y B j 
+   E | 9 , &lt; 0 J p a o ) O w 0 w # 
+   F | C j i } i z 2 $ O R 5 @ T I 
+   G | Q - E m 8 N c / + u W Y V &gt; 
+   H | , y } U Y i j i q w q c - 4 
+   I | K j W H e ; I ? E 7 H v 2 + 
+   J | g * 7 4 E } a h Y z &lt; &quot; : w 
+   K | . _ } I / J k 1 a D ^ ; p K 
+   L | ` &lt; A L c z } } I P ? 4 y T 
+   M | F D &lt; 8 &lt; 0 R B t 9 X o B 2 
+   N | I r O E m o a + Y W w ; : 7
+</code></pre>
+
+<p>And suppose we want to get our password for logging into webmail at acme.com.
+We decide to use the first and last letter of the domain name as the start
+row/column of the password and we want a password 8 characters in length. So we
+start at the intersection of &lsquo;A&rsquo; and &lsquo;E&rsquo; and read off 8 characters diagonally
+resulting in the password: <code>'#h,)RWc</code></p>
+
+<p>Defining a scheme for selecting the starting row/column for a given password is
+completely up to the user and can be as simple or as complex as one desires.
+The direction for reading the password is also up to the user to define (left,
+right, diagonally, etc.). See John Graham-Cumming&rsquo;s excellent <a href="http://blog.jgc.org/2010/12/write-your-passwords-down.html">blog
+post</a> for more
+examples.</p>
+
+<p>This method is slightly more complex than just writing down your passwords on a
+sheet of paper but the added complexity offers some advantages:</p>
+
+<ol>
+<li>Can store <em>all</em> your passwords on a single sheet of paper</li>
+<li>If someone steals this sheet of paper they&rsquo;ll have a harder time figuring
+out what your passwords are</li>
+<li>Allows you to use strong random passwords</li>
+<li>If you want to change your passwords just re-generate a new Tabula Recta.
+Your scheme for selecting passwords can stay the same</li>
+</ol>
+
+<p>passtab makes no assumptions about how passwords are read nor does it know
+anything about your scheme (unless you configure it). Now that you don&rsquo;t have
+to remember long random passwords anymore what <em>do</em> you need to remember when
+using a Tabula Recta? Well first, you need to come up with a method for finding
+the starting position for a given password. In the example above this can be as
+simple as using characters from a domain/host name. But the beauty is you can
+be as creative as you want. A scheme that works for most of your passwords
+would probably be ideal but you can certainly generate multiple Tabula Recta&rsquo;s
+if you like. Once you have a way of coming up with a starting location you need
+to define a method for reading off the password. In passtab this is called a
+<code>sequence</code>. In the example above we simply read 8 characters diagonally. But
+again you can be creative here. You could read 8 characters diagonally skipping
+every 3rd character, etc. Lastly, you&rsquo;ll need to remember what to do if you hit
+the edge of the Tabula Recta before the end of the password. For example, if
+you start at Z:Z and want to read 8 characters diagonally you can&rsquo;t because you
+reached the end of the Tabula Recta. In passtab this is called a <code>collision</code>.
+In this case we could just continue reading following the edge.</p>
+
+<p>Using the Tabula Recta allows you to make use of long secure random passwords
+and only have to remember three simple things. You also have <em>all</em> your
+passwords on a single sheet of paper that fits in your wallet.</p>
+
+<p><strong>Custom Alphabets</strong></p>
+
+<p>In passtab, a Tabula Recta consists of two alphabets. The header alphabet and
+the data alphabet. The header alphabet is used for the row and column heading
+of the Tabula Recta and forms the basis for finding the starting location of
+the passwords. The data alphabet is used to generate the contents of the Tabula
+Recta and passtab will randomly pick characters from this alphabet using a
+cryptographically secure random number generator. By default, passtab uses a
+header alphabet of <code>0-9A-Z</code> and a data alphabet consisting of all printable
+ASCII characters. It&rsquo;s important to keep in mind that the data alphabet
+directly effects the
+<a href="https://secure.wikimedia.org/wikipedia/en/wiki/Password_strength#Entropy_as_a_measure_of_password_strength">entropy</a>
+of your passwords. passtab allows you to customize these alphabets allowing you
+to generate any kind of Tabula Recta, for example:</p>
+
+<pre><code>$ ./bin/passtab -b A,B,C,D -a 'a,b,c,d,1,2,3,4,!,@,#'
+Jun 12, 2011 10:24:26 PM org.qnot.passtab.PassTab generate
+INFO: Generating a random Tabula Recta (might take a while)...
+  A B C D 
+A d 1 @ 4 
+B c 4 @ 2 
+C b 3 3 ! 
+D 1 a @ 4 
+</code></pre>
+
+<p>Here&rsquo;s a Tabula Recta using greek symbols as the header alphabet (here&rsquo;s the
+<a href="/media/passtab-greek.pdf">example PDF</a>):</p>
+
+<pre><code>$ ./bin/passtab -b 'Σ,Τ,Π,ρ,ϋ,ψ' -a 'a,b,c,d,1,2,3,4,!,@,#'
+Jun 12, 2011 11:26:00 PM org.qnot.passtab.PassTab generate
+INFO: Generating a random Tabula Recta (might take a while)...
+  Σ Τ Π ρ ϋ ψ 
+Σ 1 2 1 d d c 
+Τ 1 2 b b @ c 
+Π 1 # c 3 2 @ 
+ρ 4 2 d 2 @ 3 
+ϋ 2 3 b 1 ! b 
+ψ d @ # c ! a
+</code></pre>
+
+<p><strong>Password Management</strong></p>
+
+<p>So this is all well and great, but in reality it can be a huge pain to have to
+look up your webmail password in a Tabula Recta that&rsquo;s on a sheet of paper in
+your wallet <em>every time you login</em>. For this reason, passtab has some optional
+features to help read passwords from the Tabula Recta. This allows you to have
+both a hard copy of the Tabula Recta in your wallet and an electronic version
+stored on your hard drive for quick access to your passwords. This obviously
+comes with some security considerations and care must be taken to protect the
+passtab database as you would any ssh private key for example. If someone got a
+hold of the passtab database file they could brute force your Tabula Recta. I
+ended up creating an encrypted thumb drive and store my passtab configuration
+and database files on it. You could also use gpg to encrypt it or any other
+method to protect it from the bad guys. This next section discusses the
+password management features of passtab.</p>
+
+<p>First some definitions:</p>
+
+<ul>
+<li><strong>Direction</strong>: a <code>direction</code> to move on the Tabula Recta. Valid values are
+<code>N,S,E,W,NE,NW,SE,SW</code></li>
+<li><strong>Sequence Item</strong>: a <code>sequence item</code> consists of a <code>length</code> and <code>direction</code>.
+For example, <code>12:SE</code> would mean move 12 characters in the SE direction
+(diagonally)</li>
+<li><strong>Sequence</strong>: a <code>sequence</code> is a list of <code>sequence items</code>. This allows you to
+define arbitrary sequences for reading passwords. For example, <code>4:SE,3:N,1:S</code>
+would mean read 4 characters SE (diagonally) followed by 3 characters N (up)
+followed by 1 character S (down)</li>
+<li><strong>Collision</strong>: a <code>collision</code> defines what directions to move if we hit the
+edge of the Tabula Recta before the end of the password. You can define more
+than one direction and they will be tried in order. For example,
+N,NE,E,SE,S,SW,W,NW would mean if we hit a wall try those directions in order
+until we&rsquo;re able to move again</li>
+</ul>
+
+<p><strong>Generate a Tabula Recta in PDF and save to a passtab database</strong></p>
+
+<p>passtab can generate a Tabula Recta in PDF along with storing it in a passtab
+database. The passtab database is stored in <a href="http://json.org/">JSON</a> format and
+can be easily accessed outside of passtab (any language that can read JSON
+files). Again, you&rsquo;ll want to store that JSON file someplace safe. For example:</p>
+
+<pre><code>$ ./bin/passtab --dbsave --name mypasstab
+Jun 12, 2011 10:48:33 PM org.qnot.passtab.PassTab generate
+INFO: Generating a random Tabula Recta (might take a while)...
+$ ls mypasstab.*
+mypasstab.json  mypasstab.pdf
+</code></pre>
+
+<p><strong>Reading passwords from the passtab database</strong></p>
+
+<p>Once we&rsquo;ve created our passtab database we can now fetch passwords by telling
+passtab the starting location and the sequence to read. For example, suppose we
+want to read a password starting at row &lsquo;B&rsquo; and column &lsquo;N&rsquo; and we want a
+password 10 characters in length reading diagonally:</p>
+
+<pre><code>$ ./bin/passtab -i mypasstab.json --getpass B:N --sequence 9:SE
+o6,ZzH{e$@
+</code></pre>
+
+<p>Copy the password to the clipboard using xclip:</p>
+
+<pre><code>$ ./bin/passtab -i mypasstab.json --getpass B:N --sequence 9:SE --chomp | xclip
+</code></pre>
+
+<p>We used <code>9:SE</code> as our sequence because passtab includes the character at the
+start location in the password. If we didn&rsquo;t want to include this character we
+can optionally skip it like so:</p>
+
+<pre><code>$ ./bin/passtab -i mypasstab.json --getpass B:N --sequence 10:SE --skipstart
+6,ZzH{e$@_
+</code></pre>
+
+<p>Define a list of directions to try in the event of a collision. This will try
+the directions N,S,E,W in order until we can move again. Here we start at Z:Z
+and can&rsquo;t move SE (diagonally) so we try N (up) which works so we move N (up)
+until we hit another collision:</p>
+
+<pre><code>$ ./bin/passtab -i mypasstab.json --getpass Z:Z --sequence 9:SE --collision N,S,E,W
+a((vy&amp;0bV&amp;
+</code></pre>
+
+<p><strong>Conclusion</strong></p>
+
+<p>This post introduced a new tool called passtab for managing passwords using a
+Tabula Recta. I&rsquo;m sure it has plenty of bugs so use at your own risk and if by
+chance you find it somewhat useful I&rsquo;d be very interested in any feedback.</p>
+
+</div>
+
+</div>
+
+    
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+
+  </body>
+</html>

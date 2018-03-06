@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+
+urxvtc -name DROPTERM -g 80x30+200+50 -e /home/ben/aux/mech/apptermstart $1
+

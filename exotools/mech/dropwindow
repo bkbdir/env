@@ -1,0 +1,13 @@
+#!/bin/dash
+#
+place () {
+   term=$(xdotool getactivewindow)
+   echo $term
+   #xdotool windowmove $terminal 350 50
+}
+
+
+xdotool search --onlyvisible --classname DROPTERM windowunmap  \
+|| xdotool search --classname DROPTERM windowmap windowmove $(getwin) 350 50 \
+|| urxvtc -name DROPTERM -g 80x30+150+30 -e /home/ben/aux/mech/droptermstart
+

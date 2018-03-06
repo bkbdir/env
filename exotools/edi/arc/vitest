@@ -1,0 +1,25 @@
+#!/bin/sh
+
+tmux send-keys -t out "sh ./vitest.sh" C-m
+
+exit
+
+# END
+
+sess=$(tmux display-message -p '#S')
+win=$(tmux display-message -p '#I')
+pane=$(tmux display-message -p '#P')
+
+case $pane in
+    0)
+        tmux send-keys -t "$sess:$win.1" "sh ./virun.sh" C-m
+        ;;
+    1)
+        tmux send-keys -t "$sess:$win.0" "sh ./virun.sh" C-m
+        ;;
+    *)
+        echo "Err: pane number invalid $pane"
+        exit 1;
+        ;;
+esac
+

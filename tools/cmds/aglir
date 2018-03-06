@@ -1,0 +1,10 @@
+#!/bin/sh
+
+
+[ -n "$1" ] || { echo "usage: aglir [ searchterm ] [dir]"; exit 1;  }
+
+if [ -n "$2" ]; then
+   ag -lirw  $1 $2
+else
+   ag -lirw $1 . 
+fi

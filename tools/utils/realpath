@@ -1,0 +1,3 @@
+#!/bin/sh
+
+perl -MCwd -le 'print Cwd::realpath($ARGV[0])' $@ 

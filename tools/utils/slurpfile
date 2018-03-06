@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# copy file into clipboard
+
+file=$1
+[ -f "$file" ] || { echo "usage: file" ; exit 1; }
+
+
+rawos=$(uname) || { echo "Err: could not detect os with uname" ; exit 1 ;}
+#[ "$?" -eq 0 ] || { echo "Err: could not detect os with uname" ; exit 1 ;}
+
+os=$(perl -e '$os=$ARGV[0]; chomp($os); print(lc($os));' $rawos)
+
+
+case "$os" in
+   linux)
+      cat $file | xclip -sel clip
+      ;;
+   darwin)
+      cat $file | pbcopy 
+      ;;
+   *)
+      echo "Err: cannot copy file into clipboard. Os($os) not supported."
+      exit 1;
+   ;;
+esac

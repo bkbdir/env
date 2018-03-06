@@ -1,0 +1,28 @@
+#!/bin/sh
+
+code=$1
+shift
+
+exologd=$HOME/.exo/log
+
+mkdir -p "$exologd"
+
+fname=$(date +"%Y-%m-%d")
+
+filename=
+case "$code" in 
+   "0")
+      filename=$exologd/$fname.out
+      ;;
+   *)
+      filename=$exologd/$fname.err
+      ;;
+esac
+
+
+dateline=$(date +"%Y-%m-%d_%M_%S")
+
+echo "------------ $dateline: ------------------" >> $filename
+echo $@ >> $filename
+echo "" >> $filename
+

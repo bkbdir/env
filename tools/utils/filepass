@@ -1,0 +1,84 @@
+#!/bin/bash
+
+
+# Encrypt a file, password comes from hashpass
+
+Hashpass="$HOME/tools/moreutils/bin/hashpass"
+
+
+
+Fileinput=$1
+Enctoken=$2
+Enctype=$3
+
+die(){ echo $1; exit 1; }
+
+[ -f "$Fileinput" ] || die "Err: file $Fileinput not exists"
+
+
+
+encrypt_file () {
+   local password=$1
+
+   case "$Enctype" in
+      aes)
+         echo aescrypt -e  -p "***" -o "${Fileinput}_${Enctoken}.aes" "$Fileinput"
+         aescrypt -e  -p "$password" -o "${Fileinput}_${Enctoken}.aes" "$Fileinput"
+         ;;
+      *)
+         echo "TODO: encryption method $enctype"
+         exit 1
+         ;;
+   esac
+}
+
+decrypt_file () {
+   local hp_postfix=$1
+
+
+   local token=$(perl -e 'if($ARGV[0] =~ /^.*_(\w+_[0-9]+[A-Z][0-9]+[a-z]+)\.\w+$/){ print $1;}' $Fileinput)
+
+   local password=$(${Hashpass} "$token" "filepass/${token}" "$hp_postfix") 
+
+   local ext=${Fileinput##*.}
+   local endpart=$token.$ext
+   local fname=$(perl -e "if(\$ARGV[0] =~ /^(.*)_$endpart\$/){ print \$1;}" $Fileinput)
+   [ -n "$fname" ] || die "Err: file $fname has not the correct file name" ;
+   [ -f "$fname" ] && {
+      newfname=${fname}_$(date "+%F")
+      [ -f "$newfname" ] &&  {
+         newfname=${fname}_$(date "+%F%H%M%S")
+         [ -f "$newfname" ] && die "Err: a decrypted file '$fname' and '$newfname' exists";
+      };
+      mv "$fname" "$newfname"
+   }
+
+   case "$ext" in
+      aes)
+         aescrypt -d  -p "$password"  -o $fname "$Fileinput"
+         ;;
+      *)
+         echo "TODO: cannot decrypt $ext"
+         exit 1
+         ;;
+   esac
+}
+
+echo "Ask: password postfix"
+read  -s hp_postfix
+
+
+if [ -n "$Enctoken" ] ; then
+   [ -n "$Enctype" ] || die "Err: no encryption extension"
+
+
+   Password=$(${Hashpass} $Enctoken "filepass/${Enctoken}" "$hp_postfix") 
+   [ "$?" -eq 0  ] || die "Err: no hashpass generated" 
+   [ -n "$Password" ] || die "Err: no hashpass" ; 
+
+   encrypt_file "$Password"
+else
+  decrypt_file "$hp_postfix"
+fi
+
+#printf "$key$profile" | shasum | xxd -r -p | base64 | copy

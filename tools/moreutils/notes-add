@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+#
+use warnings;
+
+
+$cleanrx = qr|[^a-zA-Z0-9]+|;
+
+$notesfolder = $ENV{HOME} . '/aux/notes';
+
+die "aux/notes folder not exists" unless -d $notesfolder;
+
+$title = join ' ', @ARGV;
+
+$folder = shift @ARGV;
+$folder =~ s/://g;
+$folder =~ s/$cleanrx/_/g;
+
+$subfolder = "$notesfolder/$folder";
+
+`mkdir -p $subfolder` unless -d $subfolder;
+
+$filename = join '_', map {s/$cleanrx/_/g; $_} @ARGV;
+
+$filepath = "$subfolder/$filename.md";
+
+unless (-f $filepath){
+   open(my $fh, '>', $filepath) || die "Err: cannot create file $filepath";
+   print $fh $title . "\n";
+   print $fh '-' x scalar (split //, $title);
+   print $fh "\n\n";
+   close $fh;
+   print $filepath;
+}
+$editor = $ENV{EDITOR};
+
+if($editor){
+  system("$editor $filepath")
+}else{
+   print $filepath . "\n";
+}
+
+exit;
+
+__END__
+
+exit;
+

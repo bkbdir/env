@@ -1,0 +1,5 @@
+#F8
+#   /usr/bin/perl  $HOME/.exo/code/switchers/switch-urxvt-firefox.pl 
+
+shift + F9
+   rofi -show window

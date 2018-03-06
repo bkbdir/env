@@ -1,0 +1,5 @@
+#!/bin/sh
+
+
+
+echo $QUTE_URL > ~/logtest.txt

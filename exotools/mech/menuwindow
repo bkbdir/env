@@ -1,0 +1,4 @@
+#!/bin/dash
+
+
+urxvtc -g 40x20+400+100 -e /home/ben/aux/mech/menucode

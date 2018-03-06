@@ -1,0 +1,4 @@
+#!/bin/sh
+
+
+urxvtc -geometry 130x30 -e bash -c "vifm -f /home/ben/.vim/"

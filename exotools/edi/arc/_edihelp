@@ -1,0 +1,7 @@
+#!/bin/sh
+
+
+res=$(find -L ~/io/textdocs/ -type f -iname "*$1*" | ~/edi/bin/sentaku)
+
+
+

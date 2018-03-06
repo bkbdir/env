@@ -1,0 +1,5 @@
+#!/bin/sh
+
+
+[ -n "$1" ] || { echo "Err: please define url"; exit 1; }
+elinks -remote "openURL($1)"

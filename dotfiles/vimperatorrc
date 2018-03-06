@@ -1,0 +1,77 @@
+set hintchars=asdfghklqwertyuiop
+noremap a j
+
+map <F6> :silent execute "!$HOME/.exo/code/call_menu/call_menu_firefox.sh " + content.location.href <CR>
+"map <F5> :silent exec "!$HOME/.exo/code/open-url-other-monitor-I.sh "+content.location.href <CR> 
+"map <F5> :!$./open-url-other-monitor.sh
+
+map <F5> :js tester()<CR>
+:js <<EOJS
+getmeup = function() {
+   io.system("perl /home/ben/aux/hop/bkb-perlib/eg/x11-tests.pl > /home/ben/tmp");
+}
+EOJS
+
+:js <<EOJS
+getmeup = function() {
+var choice_msg = "Commands\n\
+----------\n\
+D: Download\n";
+
+var choice = window.prompt(choice_msg );
+switch (choice ){
+	case "d":
+  		liberator.execute(":saveas ~/.exo/tmp/save_page_file.html");
+
+  		var cmd = [ "perl ~/.exo/code/firefox/save_page.pl ~/.exo/tmp/save_page_file.html '",  content.location.href, "' '", document.title, "'"];
+
+  		var res2 = io.system(cmd.join(''));
+alert(res2);
+		break;
+	default:
+		alert("fffffgetkk");
+		break;
+}
+  //var choice = io.system("sh $HOME/.exo/code/menu/call_firefox_menu.sh");
+}
+EOJS
+
+"liberator.execute(":silent execute '!$HOME/.exo/code/util/tester.sh'");
+
+set defsearch=google
+set gui=navigation
+ignorekeys add ide.c9.io
+
+hi CmdLine -append font-size:18px
+
+hi CompDesc -append font-size:18px
+
+
+" remap Backspace to Shift-H (go back one page) in normal mode
+nnoremap <BS> H
+
+:js <<EOJS
+  htmget = function(tags) {
+
+  io.system('sh rm -rf ~/io/html/web/firefoxout*');
+
+  var arr = [ "sh ~/repos/env.org/env/tools/htmget ~/io/htmldocs/web", getBrowser().contentDocument.location.href, "'", document.title, "'",   tags];
+
+  liberator.execute(":saveas ~/io/htmldocs/web/firefoxout.html");
+
+  var res = io.system(arr.join(' '));
+  liberator.echo(res);
+  }
+EOJS
+
+:js <<EOJS
+  mdget = function(tags) {
+
+  var arr = [ "sh ~/repos/env.org/env/tools/mdget ~/io/htmldocs/web", getBrowser().contentDocument.location.href, "'", document.title, "'",   tags];
+
+  var res = io.system(arr.join(' '));
+  liberator.echo(res);
+  }
+EOJS
+
+set titlestring="FIREFOX"

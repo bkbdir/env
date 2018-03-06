@@ -1,0 +1,12 @@
+#!/bin/sh
+
+
+
+if [ -n "$QUTE_URL" ]; then
+   ssh bkb@diehard.fritz.box "export DISPLAY=:0; sh ~/.exo/code/quserscripts/url_receive $QUTE_URL"
+else
+   ssh bkb@diehard.fritz.box "export DISPLAY=:0; sh ~/.exo/code/quserscripts/url_receive $@"
+fi
+
+
+

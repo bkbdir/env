@@ -1,0 +1,16 @@
+#!/usr/bin/env dash
+
+
+item=$1
+
+[ -d "$item" ] || { echo "uasage: hop file/directory"; exit 1; }
+
+realitem=$(~/tools/utils/realpath $item)
+
+hop=$HOME/aux/hop
+
+mkdir -p $hop
+
+bitem=$(basename $realitem)
+rm -f $hop/$bitem
+ln -s $realitem $hop/$bitem

@@ -1,0 +1,106 @@
+#!/usr/bin/env perl
+
+# This script adds license information to a script. If there a prelude file is given, it will be included in the script
+
+our $USAGE="perlfile.pl [copyright owner] [license] (prelude.pl)";
+
+use strict;
+use warnings;
+use File::Basename;
+
+
+my ($input , $owner, $license, $prelude_file)  = @ARGV;
+die "No input. Usage: $USAGE" unless $input;
+
+# Defaults
+$owner  = 'auxdir.com' unless $owner;
+$license  = 'MIT' unless $license;
+$prelude_file = '' unless $prelude_file;
+
+my $copyright_header = "Copyright (c) $owner. All rights reserved.";
+my $license_header = sprintf "Licensed under the %s license. See the LICENSE.txt file in the project root.", uc $license;
+
+my ($prelude_path, $prelude_base, $prelude_dir, $prelude_ext) = ('', '');
+if ($prelude_file){
+   $prelude_path = glob $prelude_file ; # expand because of ~/.prelude.pl
+   ($prelude_base, $prelude_dir, $prelude_ext) = fileparse($prelude_path );
+}
+
+#
+my %lang_keys = qw( pl perl perl perl plx perl sh shell bash shell);
+my %langs = (
+   perl =>  [ '#', '',qr/.*\$USAGE\s*=\s*\".*\"\s*\;/,  qr/\s*require.*\".*$prelude_base\".*/] ,
+   shell =>  [ '#', '',qr/.*USAGE=\".*\"\s*/,  qr/\s*source.*\".*$prelude_base\".*/] 
+   );
+
+open (my $fh, '<', $input ) || die "Err: couldn't open input $input";
+
+my @prelude ; 
+if ( -f $prelude_path){
+   open (my $pfh, '<', $prelude_path) || die "Err: couldn't open prelude file $prelude_path";
+   @prelude = <$pfh>;
+   close $pfh;
+   pop @prelude;
+}
+
+
+my ($shebang, $purpose, $usage, $line) ;
+my ($prelude_start, $prelude_end, $prelude_zone);
+my @lines;
+my ($cmt , $cmt_term, $usg, $pld ) ;
+my $i = 0; 
+while (<$fh>){
+   $i++;
+   #   if (/^$cmt-- prelude start/){
+   #   $prelude_zone = 1
+   #}elsif (/^$cmt-- prelude end/){
+   #   undef $prelude_zone 
+   unless ($shebang) { die "Err: there is no shebang line " unless ($i == 1) }
+
+   if(/^\#\!(.+)/){
+      $shebang = $_;
+      my $shebang_line = $1;
+      my @parts = split ' ', $shebang_line; # because of '#!/usr/bin/env perl'
+      my $shebang_lang = ($parts[1]) ? $parts[1] : fileparse($parts[0]);
+      my $lang_key = $lang_keys{$shebang_lang};
+      my $lang = $langs{$lang_key};
+      die "Err: coulnd't detect lang for lang $shebang_lang" unless $lang;
+      ($cmt , $cmt_term, $usg, $pld )  =  @$lang;
+   }elsif(/^$cmt\s+Licensed/){
+   }elsif(/^$cmt\s+Copyright/){
+   }elsif(/^$cmt\s*(.*)$/){
+     if($purpose){
+      push @lines, $_
+     }else{
+      die "Err: empty purpose" unless $1;
+      $purpose = $_ 
+     }
+   }elsif(/^$usg$/){
+      $usage = $_;
+   }elsif(/^$pld$/){
+      if($prelude_file){
+         push @lines, $cmt . '-- prelude start: do not edit --' . $cmt_term . "\n";
+         push @lines , @prelude ;
+         push @lines, $cmt . '-- prelude end --' . $cmt_term . "\n";
+       }else{
+         push @lines, $_
+         }
+   }elsif(/^\s*$/){ # empty lines
+      push @lines, $_ if $usage;
+   }else{
+      die "Err: no shebang on line ($i) $_" unless $shebang;
+      die "Err: no purpose on line ($i) $_" unless $purpose;
+      push @lines, $_; 
+   }
+}
+
+die "Err: no usage " unless $usage;
+
+print $shebang . "\n";
+print $purpose . "\n";
+print $cmt . ' ' . $copyright_header . "\n";
+print $cmt . ' ' . $license_header . "\n";
+print "\n";
+print $usage ;
+print @lines;
+

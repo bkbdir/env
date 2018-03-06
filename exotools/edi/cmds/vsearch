@@ -1,0 +1,28 @@
+#!/bin/sh
+
+docroot=$HOME/aux/Docs
+vifm_file="$HOME/.vifm/vimfiles" 
+vimserver=VIEWER
+
+[ -n "$1" ] || { echo "usage: <tags>"; exit 1; }
+
+urxvt -geometry 130x30 -e bash -c "perl ~/aux/tools/bin/tagsearch.pl $docroot/ $@ | vifm -f -"
+
+
+[ -f "$vifm_file" ] && {
+   file=$(head -1 $vifm_file)
+   if [ -n "$file" ] ; then
+      view --servername $vimserver --remote $file 
+   else
+      sleep 0.1
+      file=$(head -1 $vifm_file)
+      if [ -n "$file" ] ; then
+         view --servername $vimserver --remote $file 
+      else
+         echo "Err: no fil found"
+         exit 1
+      fi
+   fi
+}
+
+

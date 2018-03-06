@@ -1,0 +1,6 @@
+while(<STDIN>){
+   s/\[\[(.*)\]\]/link;$1/g;
+   s/<code>/\{\{\{code: lang="$ARGV[0]" linenumbers="True"/g;
+   s/<\/code>/\}\}\}/g;
+   print $_ 
+}

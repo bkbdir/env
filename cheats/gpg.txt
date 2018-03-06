@@ -1,0 +1,12 @@
+Gpg / gnupg / pgp
+------------------
+
+
+gpg -k # list public keys
+
+	sec: (sec)ret key
+	ssb: (s)ecret (s)u(b)-key
+	pub: (pub)lic key
+	sub: public (sub)-key
+
+

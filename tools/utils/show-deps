@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Show dependencies on of a binary
+
+USAGE='<binary>'
+
+Binary=$1
+
+die() { echo "$1"; exit 1; }
+
+[ -n "$Binary" ] || die "usage: $USAGE"
+[ -f "$Binary" ] || die "Err: no valid path"
+
+Os=$(uname)
+
+case "$Os" in
+   Linux)
+      ldd "$Binary"
+      ;;
+   Darwin)
+      otool -L "$Binary"
+      ;;
+   *)
+      die "Err: os $Os not supported"
+   ;;
+esac

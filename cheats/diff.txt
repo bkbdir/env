@@ -1,0 +1,7 @@
+diff
+----
+
+* only show filenames
+   
+   diff -qr dir1 dir2
+

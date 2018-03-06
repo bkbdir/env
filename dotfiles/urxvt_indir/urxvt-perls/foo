@@ -1,0 +1,6 @@
+# create a file grab_test in $HOME:
+
+sub on_sel_grab {
+   warn "you selected ", $_[0]->selection;
+   ()
+}

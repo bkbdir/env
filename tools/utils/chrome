@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Starts Google Chrome on the command line
+
+# Copyright (c) auxdir.com. All rights reserved.
+# Licensed under the MIT license. See the LICENSE file in the project root.
+
+USAGE="[url]"
+
+os=$(uname)
+url=$1
+
+#-- prelude start: do not edit --
+die () { echo $1; exit 1; }
+usage (){ die "usage: $1";  }
+#-- prelude end --
+
+[ -n "$url" ] || { usage $USAGE ; }
+
+case "$os" in
+   Darwin)
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" $url
+   ;;
+   *)
+      echo "Err: todo $os"
+      exit 1
+   ;;
+esac
+

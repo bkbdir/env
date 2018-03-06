@@ -1,0 +1,4 @@
+Xclip
+-----
+
+    choose xsel over xclip because of error "  Error: target STRING not available" when starting script from tmux.conf.

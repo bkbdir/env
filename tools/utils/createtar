@@ -1,0 +1,36 @@
+#!/usr/bin/env perl
+
+use File::Basename;
+
+$sourcedir = shift @ARGV;
+@excludes = @ARGV;
+
+die "usage: sourcedir <exclude>" unless $sourcedir ; 
+
+
+
+($basename,$dirname) = fileparse($sourcedir);
+
+$excludestring = '';
+foreach(@excludes){
+   $excludestring = $excludestring . " --exclude=" . $_;
+}
+
+$tarfile = "$basename.tar.gz";
+
+`rm -f $tarfile`;
+
+if ($excludestring) {
+   $cmd = "tar cfvz $tarfile $excludestring -C $dirname $basename ";
+}else{
+   $cmd = "tar cfvz $tarfile -C $dirname $basename ";
+}
+
+print $cmd;
+system $cmd;
+
+
+
+
+
+

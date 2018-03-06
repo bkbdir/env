@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+export VIM_SERVERNAME=$1
+shift
+
+vim --servername $VIM_SERVERNAME $@
+
+

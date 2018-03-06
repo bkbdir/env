@@ -1,0 +1,5 @@
+#!/bin/sh
+
+/Applications/MacVim.app/Contents/MacOS/MacVim
+"disk5" unmounted.
+"disk5" ejected.

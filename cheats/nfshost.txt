@@ -1,0 +1,5 @@
+### Nearlyfreespeech
+
+    how to turn on file index
+        .htaccess file for that directory: Options +Indexes
+fossil clone ssh://repos.auxsend.org//home/public/env.fossil env.fossil

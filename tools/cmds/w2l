@@ -1,0 +1,23 @@
+#!/bin/sh
+
+file=$1
+[ -f "$file" ] || { echo "Err: invalid/empty file $file" ; exit 1; }
+
+tmpf=$(mktemp)
+
+guile $HOME/local/wisp/wisp.scm $file > $tmpf
+
+
+if [ "$?" -eq 0 ] ;then
+   tmpf2=$(mktemp)
+   perl  $HOME/tools/moreutils/filter/addlinenr.pl $tmpf ';;LN:%i' > $tmpf2
+   if [ "$?" -eq 0 ] ;then
+      unsweeten $tmpf2
+   else
+      echo "Err: problems with addlinenr"
+      exit 1
+   fi
+else
+   echo "Err: problems with 'wisp': "
+   exit 1
+fi

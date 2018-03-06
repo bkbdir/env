@@ -1,0 +1,29 @@
+#!/bin/sh
+
+inp=$1
+
+realp () {
+   f=$1
+   perl -MCwd -le 'print Cwd::realpath($ARGV[0])' $f
+}
+
+
+qb=
+for x in /usr/bin/qutebrowser /Applications/qutebrowser.app/Contents/MacOS/qutebrowser ; do
+   if [ -f "$x" ] ; then
+      qb=$x
+   fi
+done
+
+
+if [ -n "$qb" ] ; then
+   item=$inp
+   if [ -f "$item" ] ; then
+      file=$(realp $item)
+      item="file://$file"
+   fi
+   ${qb}  ":open -t $item"
+else
+   echo "Err: couldn't find qutebrowser"
+   exit 1
+fi

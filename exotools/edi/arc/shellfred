@@ -1,0 +1,109 @@
+#!/bin/bash
+
+dev=$HOME/dev
+
+
+#sess=$1
+#win=$2
+#pane=$3
+
+sess=$(tmux display -p '#S')
+win=$(tmux display -p '#W')
+pane=$(tmux display -p '#P')
+
+echo 'Shellfred'
+echo '---------'
+echo ''
+
+
+echo "y() test hello | new (L)ocal window | new Window | Inpane editor | generatek Password | vim Serverlist | Tmux list-sessions | view Notepad | .ther | Open file"
+
+echo ''
+
+read -n 1 -s input
+
+#input=""
+#while [ -z $input ]; do
+#while [[ ! $number =~ ^[0-9]+$ ]]; do
+#    read -n 2 -s input
+#    echo 'ii ' $input
+#done
+
+
+echo ""
+echo "__________________ $input ____________________"
+echo ""
+
+writectx () {
+    [ -d $dev/var ] || mkdir $dev/var
+    echo $win > $dev/var/ctx-win
+    echo $sess > $dev/var/ctx-sess
+}
+
+resume (){
+    if [ $? -eq 0 ] ; then 
+        tmux display-message "                            OK"
+    else
+        tmux display-message "Something went wrong $?"
+    fi
+}
+
+case $input in
+    x) 
+        echo 'test'
+        perl -e '$foo = <STDIN>; print $foo; '
+        ;;
+    o)
+        tmux new-window "perl $dev/edibin/viewer_open.pl $sess $win"
+        writectx
+        ;;
+
+    n)
+        perl $dev/edibin/viewer_open.pl $sess $win $dev/env/notepad.md
+        writectx
+        ;;
+    t)
+        tmux list-sessions | perl -ne '/(\w*):/ && print $1 . " | "'
+        echo ""
+        read -n 1 -p "Press key ..."
+        ;;
+    s)
+        vim --serverlist | while read i; do printf "$i | "; done
+        #res= $("vim --serverlist")
+        #tmux display-message $res
+        echo ""
+        read -n 1 -p "Press key ..."
+        ;;
+    l)
+        echo "Please give name for new window ";
+        read -e newin
+        perl $HOME/dev/edibin/tmux-newset.pl $sess $win $pane $newin
+        ;;
+    w)
+        perl $HOME/dev/edibin/tmux-newwin4.pl $sess $win
+        ;;
+    i)
+        perl $dev/edibin/tmux-editor.pl $sess $win $pane
+        ;;
+    p)
+        shift; shift ; shift # remove command line args
+        source $dev/ediutils/password_ben.bash
+        ;;
+
+#bind-key -n C-k  send-prefix \; send-keys C-z 
+    .)
+        tmux new-window "$dev/edibin/shellfred_other.sh $sess $win"
+        ;;
+    y)
+        #echo  $sess:$win.$pane  "hello"
+        #tmux list-sessions
+        tmux display-message -t $pane  "hello"
+        ;;
+    *)
+        echo "buuu"
+        ;;
+esac
+
+
+
+exit

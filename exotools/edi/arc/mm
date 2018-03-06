@@ -1,0 +1,33 @@
+#!/bin/sh
+
+
+file=$1
+
+sess=$(tmux display-message -p '#S')
+
+sessbase=${sess%-*}
+
+vimview=$(perl -e "print uc($sessbase . '_view')")
+
+vim --serverlist | grep $vimview > /dev/null || { 
+    echo "Err: Vim server $vimview not existing"
+    exit 1
+}
+
+
+
+if [ -n "$file" ] ; then
+    p=$(mktemp --suffix=_$file)
+    man $file > $p
+    [ "$?" -eq 0 ] && {
+        view --servername $vimview --remote $p
+        tmux resize-pane -t edishell:${sessbase}.2 -x 40
+        tmux resize-pane -t edishell:${sssbase}.2 -y 20 
+        tmux select-pane -t edishell:${sssbase}.2  
+    }
+else
+    tmux resize-pane -t edishell:${sessbase}.2 -x 40
+    tmux resize-pane -t edishell:${sssbase}.2 -y 20 
+    #tmux select-pane -t edishell:${sssbase}.2  
+fi
+

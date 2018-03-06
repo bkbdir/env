@@ -1,0 +1,26 @@
+#!/bin/sh
+
+
+htmlfile=$1
+[ -f "$htmlfile" ] || { echo "usage: htmlfile $htmlfile" ; exit 1; }
+
+title=$2
+
+[ -z "$title" ] && {
+   title=$(perl -ne '/<title>(.*)<\/title>/ and print $1' $htmlfile) 
+}
+
+[ -z "$title" ] && { echo "Err: coulnd't retrieve title;" ; exit 1; }
+
+
+outname=$(perl -e '$str=join "-", map { s/[^a-zA-Z0-9]+/_/g; lc $_ ; } @ARGV ; print $str ; ' $title)
+
+
+outfile=$outname.html
+
+if [ "$outfile" = "$htmlfile" ] ; then
+   echo "Err: file has already the filename according to its title"
+else
+   echo mv $htmlfile $outfile
+   mv $htmlfile $outfile
+fi

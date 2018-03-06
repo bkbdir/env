@@ -1,0 +1,9 @@
+#!/bin/bash
+export IFS="" #read will now preserve whitespace
+read -rp "parameter: " PARAMETER
+read -rsp "password: " PASSWORD
+echo
+echo -n "$PARAMETER" \
+| openssl dgst -sha1 -binary -hmac "$PASSWORD" \
+| openssl enc -base64 \
+| cut -c 1-16

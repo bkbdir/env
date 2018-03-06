@@ -1,0 +1,35 @@
+#!/bin/sh
+
+
+code=$1 # out/err
+
+
+[ -n "$code" ] || { echo "usage: <logdir> <code(err/out)>"; exit 1; }
+
+logdir=$HOME/.exo/log
+[ -d "$logdir" ] || { echo "Err: no logdir $logdir"; exit 1; }
+
+namebase=$(date +"%Y-%m-%d")
+
+filename=
+buildfile () {
+   ext=$1
+   filename=$logdir/$namebase.$ext
+   [ -f "$filename" ] || { echo "Err: logfile($ext) $filename not exist"; exit 1; }
+}
+
+case "$code" in
+   err|out) buildfile "$code" ;;
+   *) echo "Err: invalidi $code "; exit 1 ;;
+esac
+
+while :
+   do
+      printf "$code: "
+      cat $filename
+      sleep 1
+done
+
+
+
+

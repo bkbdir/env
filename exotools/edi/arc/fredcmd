@@ -1,0 +1,35 @@
+#!/bin/sh
+#res=$({ echo "browse ";
+#echo notepad
+#}| rofi -dmenu)
+
+
+
+read -n 2 res
+
+
+tmux display-message $res
+
+exit
+
+
+word=$(echo $res | tr -d ' ')
+
+case "$word" in
+    browse\ *)
+        browseres="$(echo '' | rofi -dmenu -mesg 'browse')"
+        surfraw google $browseres
+        ;;
+    notepad)
+        sh $HOME/dev/edi/openreader.sh $HOME/dev/notepad.md
+
+        ;;
+    q)
+        echo -n ""
+        ;;
+    *)
+        echo "nnnn"
+        ;;
+esac
+
+

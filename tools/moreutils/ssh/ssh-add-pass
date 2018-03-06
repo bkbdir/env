@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# use ssh-add with a password file
+USAGE="ssh-add-pass keyfile passfile"
+
+if [ $# -ne 2 ] ; then
+  echo "usage: $USAGE"
+  exit 1
+fi
+
+eval $(ssh-agent)
+pass=$(cat $2)
+
+expect << EOF
+  spawn ssh-add $1
+  expect "Enter passphrase"
+  send "$pass\r"
+  expect eof
+EOF

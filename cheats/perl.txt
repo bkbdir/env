@@ -1,0 +1,37 @@
+Perl
+----
+
+### grep 
+   print grep { $_ =~ /$regex/ } <>;
+
+### regex case insesitive
+
+   if ($str1 =~ /^$str2$/i) { ... }
+
+### variable with scriptname
+   $0
+
+### dirname
+
+   use File::Basename
+
+   $d = dirname(fullname)
+
+### remove all newlines
+
+    $line =~ s/\015?\012?$//;
+
+
+### file slurp 
+
+    open(my $f, '<', $filename) or die "Err $filename: $!\n";
+    $string = do { local($/); <$f> };
+    close($f);
+
+### os name
+
+   use POSIX qw(uname);
+   my @uname = uname();
+   print $uname[0] . " " . $uname[2];
+
+

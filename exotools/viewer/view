@@ -1,0 +1,45 @@
+#!/bin/sh
+
+realp=$(perl -MCwd -le 'print Cwd::realpath($ARGV[0])' $1)
+
+[ -f "$realp" ] || { echo "Err: no valid fil" ; exit 1; }
+
+fname=$(basename $realp)
+dname=$(dirname $realp)
+name=${fname%.*}
+ext=${fname##*.}
+
+prochtml (){
+   p=$1
+   title=$2
+   #title=$(perl -e '$str=join "-", map { s/[^a-zA-Z0-9]+/_/g; lc $_ ; } @ARGV ; print $str ; ' $p)
+   echo $title
+   tmux has -t view 2>/dev/null || TERM=xterm-256color && tmux -2  new -s view -d
+
+   winid=$(perl -e 'foreach(qx(tmux list-windows -t view)){if( /^(\d+):\s+($ARGV[0])[-*]*\s+\(\d+ panes\)/){print $1; last; }}' "$title")
+     if [ -n "$winid" ]  ;then
+     #   perl -e '@w=qx(tmux list-windows -t view);@a=(a..z); for($i=0;$i<@w;$i++){print $a[$i].": ".$w[$i]}'
+      tmux select-window -t view:$winid
+     else
+        TERM=xterm-256color && tmux -2 new-window -t view -n "$title" "elinks $p"
+      fi
+   
+}
+
+case "$ext" in
+   html)
+      title=$(perl -ne '/<title>(.*)<\/title>/ && print $1' $realp)
+      prochtml "$realp" "$title"
+      ;;
+   md)
+      hfile=$dname/$name.html
+      title=$(perl -ne '/^#\s+(.*)$/ && print $1' $realp)
+      pandoc -s "$realp" -T "$title" > $hfile
+      prochtml "$hfile" "$title"
+      ;;
+   *)
+      echo todo
+      exit
+      ;;
+esac
+

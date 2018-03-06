@@ -1,0 +1,21 @@
+#!/bin/sh
+
+rpx=$HOME/tools/utils/realpath
+[ -f "$rpx" ] || { echo "Err: no realpath in $rpx"; exit 1; }
+
+if [ -f "$1" ] ; then
+   rp=$($rpx $1)
+   tmux send-keys -t out.0 "clear; cat $rp" Enter
+else
+   cmd=$1
+   file=$2
+   shift
+   shift
+   if [ -f "$file" ] ; then
+      rp=$($rpx $1)
+      tmux send-keys -t out.0 "clear; ${cmd} $rp/$file" Enter
+   else
+      tmux send-keys -t out.0 "clear; ${cmd} ${file} $@" Enter
+   fi
+fi
+

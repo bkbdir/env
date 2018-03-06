@@ -1,0 +1,20 @@
+Perl Oneliners
+--------------
+
+-e '...'                   program
+-s='...'        command line arg
+
+cat /etc/hosts | perl -sne '/localhost/ && print $d ' /etc/hosts -- -d='"success!"'
+
+perl -se  '/whatever/ && print  for <>' -- -u=diamond /etc/hosts 
+
+
+### Looping: 
+
+-n                assume 'while (<>) { ... }' loop around program
+-p                assume loop like -n but print line also, 
+-l                print endline
+-i[extension]   edit <> files in place (makes backup if extension supplied)
+
+
+### Splitting

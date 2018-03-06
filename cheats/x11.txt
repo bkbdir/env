@@ -1,0 +1,11 @@
+X11
+----
+
+reload .Xresources: 
+
+   xrdb ~/.Xresources
+
+or
+
+   xrdb -merge .Xresources
+
