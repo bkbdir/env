@@ -2,7 +2,6 @@
 now=$(shell date  "+%y.%m.%d")
 
 file-$(now):
-	echo shit
 
 index:
 	pandoc -s README.md > index.html
